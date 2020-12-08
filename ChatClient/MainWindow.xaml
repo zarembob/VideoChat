@@ -17,7 +17,7 @@
             <Label>Password:</Label>
             <PasswordBox x:Name="password"  Padding="5"></PasswordBox>
             <Button  MaxWidth="70" Margin="20" Click="Button_Click">Sign in</Button>
-            <Button MaxWidth="70"  Margin="20" >Sign up</Button>
+            <Button MaxWidth="70"  Margin="20" Click="Button_Click_1" >Sign up</Button>
         </StackPanel>
     </Grid>
 </Window>
