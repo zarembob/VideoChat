@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,17 +14,66 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 
 namespace ChatClient
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private const int port = 2020;
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Option("Login");
+            var client = new Client
+            {
+                Username = username.Text,
+                Email = email.Text,
+                Password = password.Password,
+            };
+            var TCP = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = TCP.GetStream())
+            {
+                var serializer = new XmlSerializer(client.GetType());
+                serializer.Serialize(stream, client);
+            }
+            TCP.Close();
+
+        }
+
+        private void Option(string str)
+        {
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(string));
+                serializer1.Serialize(stream, str);
+            }
+            client.Close();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Option("Register");
+            var client = new Client
+            {
+                Username = username.Text,
+                Email = email.Text,
+                Password = password.Password,
+                
+            };
+            var TCP = new TcpClient(Dns.GetHostName(), port);
+
+            using (var stream = TCP.GetStream())
+            {
+                var serializer = new XmlSerializer(client.GetType());
+                serializer.Serialize(stream, client);
+            }
+            TCP.Close();
         }
     }
 }
