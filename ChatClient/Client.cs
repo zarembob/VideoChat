@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace ChatClient
 {
     [Serializable]
-    class Client
+    class ClientDTO
     {
+        public int Id { get; set; }
         private string username;
         public string Username { get { return username; } set { username = value; } }
         private string email;
