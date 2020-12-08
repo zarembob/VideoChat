@@ -29,7 +29,7 @@ namespace ChatClient
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Option("Login");
-            var client = new Client
+            var client = new ClientDTO
             {
                 Username = username.Text,
                 Email = email.Text,
@@ -59,7 +59,7 @@ namespace ChatClient
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Option("Register");
-            var client = new Client
+            var client = new ClientDTO
             {
                 Username = username.Text,
                 Email = email.Text,
