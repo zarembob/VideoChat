@@ -9,7 +9,11 @@ namespace ChatServer
    public class DBHelper
     {
         private ClientModel Context;
-        public void AddContact(Client client)
+        public DBHelper()
+        {
+            Context = new ClientModel();
+        }
+        public void AddClient(Client client)
         {
             Context.Clients.Add(client);
             Context.SaveChanges();

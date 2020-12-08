@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace ChatClient
 {
     [Serializable]
+
     public class ClientDTO
     {
         public int Id { get; set; }
@@ -17,5 +18,6 @@ namespace ChatClient
         private string password;
         public string Password { get { return password; } set { password = value; } }
      
+
     }
 }

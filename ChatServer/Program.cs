@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatClient;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -29,9 +30,9 @@ namespace ChatServer
             ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
             server = new TcpListener(ip, port);
             server.Start();
-            string res;
+            string res="";
 
-            while(true)
+            while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
                 var client = server.AcceptTcpClient();
@@ -43,7 +44,25 @@ namespace ChatServer
                     res = (string)serializer1.Deserialize(stream);
                     Console.WriteLine(res);
                 }
-               // client = server.AcceptTcpClient();
+                client = server.AcceptTcpClient();
+
+                using (var stream = client.GetStream())
+                {
+                    if (res == "Register")
+                    {
+                        var serializer2 = new XmlSerializer(typeof(ClientDTO));
+                        var client2 = (ClientDTO)serializer2.Deserialize(stream);
+                        Client c = new Client
+                        {
+                            Email = client2.Email,
+                            Name = client2.Name,
+                            Password = client2.Password
+
+                        };
+                        dbHelper.AddClient(c);
+                        Console.WriteLine("Finished Register");
+                    }
+                }
             }
         }
     }
