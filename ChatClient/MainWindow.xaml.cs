@@ -29,19 +29,19 @@ namespace ChatClient
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Option("Login");
-            var client = new ClientDTO
-            {
-                Username = username.Text,
-                Email = email.Text,
-                Password = password.Password,
-            };
-            var TCP = new TcpClient(Dns.GetHostName(), port);
-            using (var stream = TCP.GetStream())
-            {
-                var serializer = new XmlSerializer(client.GetType());
-                serializer.Serialize(stream, client);
-            }
-            TCP.Close();
+           // var client = new ClientDTO
+           // {
+           //     Name = username.Text,
+           //     Email = email.Text,
+           //     Password = password.Password,
+           // };
+           // var TCP = new TcpClient(Dns.GetHostName(), port);
+           // using (var stream = TCP.GetStream())
+           // {
+           //     var serializer = new XmlSerializer(client.GetType());
+           //     serializer.Serialize(stream, client);
+           // }
+           // TCP.Close();
 
         }
 
@@ -59,21 +59,21 @@ namespace ChatClient
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Option("Register");
-           // var client = new ClientDTO
-           // {
-           //     Username = username.Text,
-           //     Email = email.Text,
-           //     Password = password.Password,
-           //     
-           // };
-           // var TCP = new TcpClient(Dns.GetHostName(), port);
-           //
-           // using (var stream = TCP.GetStream())
-           // {
-           //     var serializer = new XmlSerializer(client.GetType());
-           //     serializer.Serialize(stream, client);
-           // }
-           // TCP.Close();
+            var client = new ClientDTO
+            {
+                Name = username.Text,
+                Email = email.Text,
+                Password = password.Password,
+                
+            };
+            var TCP = new TcpClient(Dns.GetHostName(), port);
+           
+            using (var stream = TCP.GetStream())
+            {
+                var serializer = new XmlSerializer(client.GetType());
+                serializer.Serialize(stream, client);
+            }
+            TCP.Close();
         }
     }
 }
