@@ -7,6 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+
+        <StackPanel Margin="10" Background="Azure">
+            <Label HorizontalAlignment="Center">Sign in or register</Label>
+            <Label>Username:</Label>
+            <TextBox x:Name="username" Padding="5"></TextBox>
+            <Label>Email:</Label>
+            <TextBox x:Name="email" Padding="5"></TextBox>
+            <Label>Password:</Label>
+            <PasswordBox x:Name="password"  Padding="5"></PasswordBox>
+            <Button  MaxWidth="70" Margin="20" Click="Button_Click">Sign in</Button>
+            <Button MaxWidth="70"  Margin="20" >Sign up</Button>
+        </StackPanel>
     </Grid>
 </Window>
