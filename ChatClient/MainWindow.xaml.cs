@@ -42,6 +42,25 @@ namespace ChatClient
                 serializer.Serialize(stream, client);
             }
             TCP.Close();
+            var callbackString = AcceptCallback();
+
+        }
+
+        private string AcceptCallback()
+        {
+            string response;
+            IPAddress ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
+            var server = new TcpListener(ip, port);
+            server.Start();
+            var client = server.AcceptTcpClient();
+
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(string));
+                response = (string)serializer1.Deserialize(stream);
+
+            }
+            return response;
 
         }
 
@@ -64,16 +83,17 @@ namespace ChatClient
                 Username = username.Text,
                 Email = email.Text,
                 Password = password.Password,
-                
+
             };
             var TCP = new TcpClient(Dns.GetHostName(), port);
-           
+
             using (var stream = TCP.GetStream())
             {
                 var serializer = new XmlSerializer(client.GetType());
                 serializer.Serialize(stream, client);
             }
             TCP.Close();
+            var callbackString = AcceptCallback();
         }
     }
 }
