@@ -67,9 +67,11 @@ namespace ChatClient
             }
         
             TCP.Close();
-            Option("Check");
+
+            Option("CheckRegister");
             var callbackString = AcceptCallback();
-            CheckResult(callbackString);
+            CheckResultRegister(callbackString);
+
         }
         private void Option(string str)
         {
@@ -104,6 +106,18 @@ namespace ChatClient
             {
                 bruh.Content = "Denied";
 
+            }
+        }
+        private void CheckResultRegister(string callbackString)
+        {
+            if (callbackString == "Done")
+            {
+                bruh.Content = "Done";
+              
+            }
+            else if (callbackString == "Error")
+            {
+                bruh.Content = "Error";
             }
         }
     }

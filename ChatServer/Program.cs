@@ -32,6 +32,7 @@ namespace ChatServer
             server.Start();
             string res = "";
             bool isLogin = false;
+            bool isRegister = false;
             while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
@@ -52,6 +53,7 @@ namespace ChatServer
                     {
                         var serializer2 = new XmlSerializer(typeof(ClientDTO));
                         var client2 = (ClientDTO)serializer2.Deserialize(stream);
+
                         Client c = new Client
                         {
                             Email = client2.Email,
@@ -59,8 +61,16 @@ namespace ChatServer
                             Password = client2.Password
 
                         };
-                        dbHelper.AddClient(c);
-                        Console.WriteLine("Finished Register");
+                        if (!dbHelper.IsRegister(c))
+                        {
+                            isRegister = true;
+                            dbHelper.AddClient(c);
+                            Console.WriteLine("Finished Register");
+                        }
+                        else
+                        {
+                            isRegister = false;
+                        }
                     }
                     else if (res == "Login")
                     {
@@ -83,16 +93,31 @@ namespace ChatServer
                     }
                     else if (res == "Check")
                     {
-                        var serializer = new XmlSerializer(typeof(string));                     
+                        var serializer = new XmlSerializer(typeof(string));
                         if (isLogin)
                         {
                             serializer.Serialize(stream, "Granted");
-                            Console.WriteLine("2");
+                            Console.WriteLine("Granted");
                         }
                         else
                         {
                             serializer.Serialize(stream, "Denied");
-                            Console.WriteLine("2");
+                            Console.WriteLine("Denied");
+
+                        }
+                    }
+                    else if (res == "CheckRegister")
+                    {
+                        var serializer = new XmlSerializer(typeof(string));
+                        if (isRegister)
+                        {
+                            serializer.Serialize(stream, "Done");
+                            Console.WriteLine("Done");
+                        }
+                        else
+                        {
+                            serializer.Serialize(stream, "Error");
+                            Console.WriteLine("Error");
 
                         }
                     }
