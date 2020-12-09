@@ -42,14 +42,12 @@ namespace ChatClient
                 serializer.Serialize(stream, client);
             }
             TCP.Close();
+            Option("Check");
+
             var callbackString = AcceptCallback();
             CheckResult(callbackString);
 
         }
-
-
-
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Option("Register");
@@ -67,9 +65,17 @@ namespace ChatClient
                 var serializer = new XmlSerializer(client.GetType());
                 serializer.Serialize(stream, client);
             }
+          //  string response;
+          //  using (var stream = TCP.GetStream())
+          //  {
+          //      var serializer1 = new XmlSerializer(typeof(string));
+          //      response = (string)serializer1.Deserialize(stream);
+          //      username.Text = response;
+          //  }
             TCP.Close();
-            var callbackString = AcceptCallback();
-            CheckResult(callbackString);
+            //Option("Check");
+            //var callbackString = AcceptCallback();
+            //CheckResult(callbackString);
         }
         private void Option(string str)
         {
@@ -84,21 +90,15 @@ namespace ChatClient
         private string AcceptCallback()
         {
             string response;
-            IPAddress ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
-            var server = new TcpListener(ip, port);
-            server.Start();
-            var client = server.AcceptTcpClient();
+            var client = new TcpClient(Dns.GetHostName(), port);
 
             using (var stream = client.GetStream())
             {
                 var serializer1 = new XmlSerializer(typeof(string));
                 response = (string)serializer1.Deserialize(stream);
-
             }
             return response;
-
         }
-
         private void CheckResult(string callbackString)
         {
             if (callbackString == "Granted")
