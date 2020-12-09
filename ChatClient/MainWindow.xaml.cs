@@ -67,9 +67,11 @@ namespace ChatClient
             }
         
             TCP.Close();
+
             Option("CheckRegister");
             var callbackString = AcceptCallback();
             CheckResultRegister(callbackString);
+
         }
         private void Option(string str)
         {
