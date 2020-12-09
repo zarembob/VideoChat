@@ -65,17 +65,17 @@ namespace ChatClient
                 var serializer = new XmlSerializer(client.GetType());
                 serializer.Serialize(stream, client);
             }
-            string response;
-            using (var stream = TCP.GetStream())
-            {
-                var serializer1 = new XmlSerializer(typeof(string));
-                response = (string)serializer1.Deserialize(stream);
-                username.Text = response;
-            }
+          //  string response;
+          //  using (var stream = TCP.GetStream())
+          //  {
+          //      var serializer1 = new XmlSerializer(typeof(string));
+          //      response = (string)serializer1.Deserialize(stream);
+          //      username.Text = response;
+          //  }
             TCP.Close();
-            Option("Check");
-            var callbackString = AcceptCallback();
-            CheckResult(callbackString);
+            //Option("Check");
+            //var callbackString = AcceptCallback();
+            //CheckResult(callbackString);
         }
         private void Option(string str)
         {
