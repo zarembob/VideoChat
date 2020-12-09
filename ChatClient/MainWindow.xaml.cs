@@ -43,37 +43,12 @@ namespace ChatClient
             }
             TCP.Close();
             var callbackString = AcceptCallback();
+            CheckResult(callbackString);
 
         }
 
-        private string AcceptCallback()
-        {
-            string response;
-            IPAddress ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
-            var server = new TcpListener(ip, port);
-            server.Start();
-            var client = server.AcceptTcpClient();
 
-            using (var stream = client.GetStream())
-            {
-                var serializer1 = new XmlSerializer(typeof(string));
-                response = (string)serializer1.Deserialize(stream);
 
-            }
-            return response;
-
-        }
-
-        private void Option(string str)
-        {
-            var client = new TcpClient(Dns.GetHostName(), port);
-            using (var stream = client.GetStream())
-            {
-                var serializer1 = new XmlSerializer(typeof(string));
-                serializer1.Serialize(stream, str);
-            }
-            client.Close();
-        }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
@@ -94,6 +69,47 @@ namespace ChatClient
             }
             TCP.Close();
             var callbackString = AcceptCallback();
+            CheckResult(callbackString);
+        }
+        private void Option(string str)
+        {
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(string));
+                serializer1.Serialize(stream, str);
+            }
+            client.Close();
+        }
+        private string AcceptCallback()
+        {
+            string response;
+            IPAddress ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
+            var server = new TcpListener(ip, port);
+            server.Start();
+            var client = server.AcceptTcpClient();
+
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(string));
+                response = (string)serializer1.Deserialize(stream);
+
+            }
+            return response;
+
+        }
+
+        private void CheckResult(string callbackString)
+        {
+            if (callbackString == "Granted")
+            {
+                bruh.Content = "Granted";
+            }
+            else if (callbackString == "Denied")
+            {
+                bruh.Content = "Denied";
+
+            }
         }
     }
 }
