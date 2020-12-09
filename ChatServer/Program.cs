@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace ChatServer
 {
-  
+
     class Program
     {
         private const int port = 2020;
@@ -30,8 +30,8 @@ namespace ChatServer
             ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
             server = new TcpListener(ip, port);
             server.Start();
-            string res="";
-
+            string res = "";
+            bool isLogin = false;
             while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
@@ -62,6 +62,41 @@ namespace ChatServer
                         dbHelper.AddClient(c);
                         Console.WriteLine("Finished Register");
                     }
+                    else if (res == "Login")
+                    {
+                        var serializer2 = new XmlSerializer(typeof(ClientDTO));
+                        var client2 = (ClientDTO)serializer2.Deserialize(stream);
+                        Client c = new Client
+                        {
+                            Email = client2.Email,
+                            Name = client2.Username,
+                            Password = client2.Password
+                        };
+                        if (dbHelper.IsLogin(c))
+                        {
+                            isLogin = true;
+                        }
+                        else
+                        {
+                            isLogin = false;
+                        }
+                    }
+                    else if (res == "Check")
+                    {
+                        var serializer = new XmlSerializer(typeof(string));                     
+                        if (isLogin)
+                        {
+                            serializer.Serialize(stream, "Granted");
+                            Console.WriteLine("2");
+                        }
+                        else
+                        {
+                            serializer.Serialize(stream, "Denied");
+                            Console.WriteLine("2");
+
+                        }
+                    }
+
                 }
             }
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChatServer
 {
-   public class DBHelper
+    public class DBHelper
     {
         private ClientModel Context;
         public DBHelper()
@@ -17,6 +17,20 @@ namespace ChatServer
         {
             Context.Clients.Add(client);
             Context.SaveChanges();
+        }
+        public bool IsLogin(Client c)
+        {
+            bool flag = false;
+            foreach (Client item in Context.Clients)
+            {
+                if (item.Name == c.Name && item.Password == c.Password)
+                {
+
+                    flag = true;
+                    break;
+                }
+            }
+            return flag;
         }
     }
 }
