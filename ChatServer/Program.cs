@@ -55,7 +55,7 @@ namespace ChatServer
                         Client c = new Client
                         {
                             Email = client2.Email,
-                            Name = client2.Name,
+                            Name = client2.Username,
                             Password = client2.Password
 
                         };
