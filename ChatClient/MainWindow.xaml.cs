@@ -104,6 +104,7 @@ namespace ChatClient
             if (callbackString == "Granted")
             {
                 bruh.Content = "Granted";
+                this.Content = new VideoUI();
             }
             else if (callbackString == "Denied")
             {
