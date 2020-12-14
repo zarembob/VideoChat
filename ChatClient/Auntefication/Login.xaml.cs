@@ -12,34 +12,47 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
 namespace ChatClient
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Логика взаимодействия для Login.xaml
+    /// </summary>
+    public partial class Login : Window
     {
         private const int port = 2020;
-        public MainWindow()
+        public Login()
         {
             InitializeComponent();
         }
-
-
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Option("Login");
+            var client = new ClientDTO
+            {
+                //Username = username.Text,
+                Email = email.Text,
+                Password = password.Password,
+            };
+            var TCP = new TcpClient(Dns.GetHostName(), port);
             using (var stream = TCP.GetStream())
             {
                 var serializer = new XmlSerializer(client.GetType());
                 serializer.Serialize(stream, client);
             }
-        
             TCP.Close();
-
-            Option("CheckRegister");
+            Option("Check");
             var callbackString = AcceptCallback();
-            CheckResultRegister(callbackString);
-
+            CheckResult(callbackString);
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            this.Content = new Register();
+        }
+
         private void Option(string str)
         {
             var client = new TcpClient(Dns.GetHostName(), port);
@@ -66,26 +79,18 @@ namespace ChatClient
         {
             if (callbackString == "Granted")
             {
-                bruh.Content = "Granted";
-                this.Content = new VideoUI();
+                // bruh.Content = "Granted";
+                MainWindow main = new MainWindow();
+                main.Show();
+                var tmp = this.Parent;
+                (tmp as Window).Close();
             }
             else if (callbackString == "Denied")
             {
-                bruh.Content = "Denied";
+                // bruh.Content = "Denied";
 
             }
         }
-        private void CheckResultRegister(string callbackString)
-        {
-            if (callbackString == "Done")
-            {
-                bruh.Content = "Done";
-              
-            }
-            else if (callbackString == "Error")
-            {
-                bruh.Content = "Error";
-            }
-        }
+
     }
 }

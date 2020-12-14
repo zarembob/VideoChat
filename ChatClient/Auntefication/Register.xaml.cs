@@ -18,26 +18,39 @@ using System.Xml.Serialization;
 
 namespace ChatClient
 {
-    public partial class MainWindow : Window
+    /// <summary>
+    /// Логика взаимодействия для Register.xaml
+    /// </summary>
+    public partial class Register : UserControl
     {
         private const int port = 2020;
-        public MainWindow()
+
+        public Register()
         {
             InitializeComponent();
         }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Option("Register");
+            var client = new ClientDTO
+            {
+                Username = username.Text,
+                Email = email.Text,
+                Password = password.Password,
 
+            };
+            var TCP = new TcpClient(Dns.GetHostName(), port);
 
             using (var stream = TCP.GetStream())
             {
                 var serializer = new XmlSerializer(client.GetType());
                 serializer.Serialize(stream, client);
             }
-        
-            TCP.Close();
 
+            TCP.Close();
             Option("CheckRegister");
             var callbackString = AcceptCallback();
-            CheckResultRegister(callbackString);
+            CheckResult(callbackString);
 
         }
         private void Option(string str)
@@ -64,28 +77,27 @@ namespace ChatClient
         }
         private void CheckResult(string callbackString)
         {
-            if (callbackString == "Granted")
-            {
-                bruh.Content = "Granted";
-                this.Content = new VideoUI();
-            }
-            else if (callbackString == "Denied")
-            {
-                bruh.Content = "Denied";
-
-            }
-        }
-        private void CheckResultRegister(string callbackString)
-        {
             if (callbackString == "Done")
             {
-                bruh.Content = "Done";
-              
+                MainWindow main = new MainWindow();
+                main.Show();
+                var tmp = this.Parent;
+                (tmp as Window).Close();
+
             }
             else if (callbackString == "Error")
             {
-                bruh.Content = "Error";
+                // bruh.Content = "Denied";
+
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Login l = new Login();
+            l.Show();
+            var parent = this.Parent;
+            (parent as Window).Close();
         }
     }
 }
