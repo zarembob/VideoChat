@@ -51,10 +51,10 @@ namespace ChatClient
             }
             return response;
         }
-        public List<string> AcceptCallbackLogin()
-        {
+       // public List<string> AcceptCallbackLogin()
+       // {
 
-        }
+      //  }
         public void Option(string str)
         {
             var client = new TcpClient(Dns.GetHostName(), port);

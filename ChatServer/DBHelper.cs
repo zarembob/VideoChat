@@ -18,6 +18,11 @@ namespace ChatServer
             Context.Clients.Add(client);
             Context.SaveChanges();
         }
+        public void AddFriend(Friend f)
+        {
+            Context.Friends.Add(f);
+            Context.SaveChanges();
+        }
         public bool IsLogin(Client c)
         {
             bool flag = false;
@@ -38,7 +43,7 @@ namespace ChatServer
             bool flag = false;
             foreach (Client item in Context.Clients)
             {
-                if (item.Name == c.Name||item.Email==c.Email)
+                if (item.Name == c.Name || item.Email == c.Email)
                 {
                     flag = true;
                     break;

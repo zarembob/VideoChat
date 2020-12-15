@@ -31,14 +31,14 @@ namespace ChatClient
         }
         ClientHelper helper = new ClientHelper();
         private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
+        {      
             helper.Option("Register");
             var client = new ClientDTO
             {
                 Username = username.Text,
                 Email = email.Text,
                 Password = password.Password,
+                //friends = f
 
             };
             helper.SendClient(client);

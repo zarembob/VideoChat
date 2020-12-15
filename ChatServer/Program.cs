@@ -57,7 +57,7 @@ namespace ChatServer
                         {
                             Email = client2.Email,
                             Name = client2.Username,
-                            Password = client2.Password
+                            Password = client2.Password,
 
                         };
                         if (!dbHelper.IsRegister(c))
@@ -65,6 +65,14 @@ namespace ChatServer
                             isRegister = true;
                             dbHelper.AddClient(c);
                             Console.WriteLine("Finished Register");
+                            Friend f = new Friend()
+                            {
+                                Name = "Sasha",
+                                Email = "qwerty",
+                                ClientId=c.Id
+                               
+                            };
+                            dbHelper.AddFriend(f);
                         }
                         else
                         {
@@ -78,13 +86,15 @@ namespace ChatServer
                         Client c = new Client
                         {
                             Email = client2.Email,
-                           // Name = client2.Username,
-                            Password = client2.Password
+                            // Name = client2.Username,
+                            Password = client2.Password,
+                           
                         };
+
                         if (dbHelper.IsLogin(c))
                         {
-
                             isLogin = true;
+                            Console.WriteLine();
                         }
                         else
                         {

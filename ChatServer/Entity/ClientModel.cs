@@ -12,8 +12,10 @@
         {
         }
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+
 
     }
 
-   
+
 }
