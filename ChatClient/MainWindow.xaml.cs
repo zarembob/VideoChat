@@ -21,9 +21,12 @@ namespace ChatClient
     public partial class MainWindow : Window
     {
         private const int port = 2020;
-        public MainWindow()
+        public MainWindow(ClientDTO client)
         {
             InitializeComponent();
+            client.Friends.Add("Sasha");
+            client.Friends.Add("Bob");
+
         }
 
 

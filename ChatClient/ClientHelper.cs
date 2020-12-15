@@ -29,7 +29,7 @@ namespace ChatClient
             if (callbackString == "Granted")
             {
 
-                MainWindow main = new MainWindow();
+                MainWindow main = new MainWindow(new ClientDTO());
                 main.Show();
             }
             else if (callbackString == "Denied")
@@ -38,7 +38,22 @@ namespace ChatClient
 
             }
         }
+        public void CheckResultLogin(ref ClientDTO client)
+        {
+            if (client.Friends[0] == "Granted")
+            {
+                client.Username = client.Friends[1];
 
+                MainWindow main = new MainWindow(client);
+                main.Show();
+
+            }
+            else if (client.Friends[0] != "Granted" )
+            {
+                Check = "Invalid data.";
+
+            }
+        }
         public string AcceptCallback()
         {
             string response;

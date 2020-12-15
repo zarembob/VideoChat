@@ -41,8 +41,8 @@ namespace ChatClient
 
             helper.SendClient(client);
             helper.Option("Check");
-            var callbackString = helper.AcceptCallback();
-            helper.CheckResult(callbackString);
+            client.Friends = helper.AcceptCallbackLogin();
+           helper.CheckResultLogin(ref client);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
