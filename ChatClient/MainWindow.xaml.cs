@@ -21,9 +21,19 @@ namespace ChatClient
     public partial class MainWindow : Window
     {
         private const int port = 2020;
-        public MainWindow()
+        public MainWindow(ClientDTO _client)
         {
+            
             InitializeComponent();
+            _client.Friends.Remove("Granted");
+            _client.Friends.Remove(_client.Username);
+            if(_client.Friends.Count==0)
+            {
+
+            }
+            this.DataContext = _client;
+            
+
         }
 
 

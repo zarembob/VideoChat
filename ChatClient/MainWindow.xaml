@@ -12,7 +12,10 @@
             <StackPanel Orientation="Horizontal">
                 <Label>User:</Label>
                 <Label Content="{Binding Username, UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"></Label>
+                
             </StackPanel>
+            <Label>Friends:</Label>
+            <ListBox ItemsSource="{Binding Friends, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></ListBox>
         </StackPanel>
     </Grid>
 </Window>
