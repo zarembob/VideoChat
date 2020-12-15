@@ -33,6 +33,7 @@
         </Grid>
         <Button Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="100,0,100,65" Content="LOGIN" Click="Button_Click" />
         <Button Content="Sign up" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30" Foreground="White" Cursor="Hand" Click="Button_Click_1"/>
-        <Image Source="Assets/home.jpg" Width="100" Height="100" VerticalAlignment="Top" Margin="30"/>
+        <!--<Image Source="Assets/home.jpg" Width="100" Height="100" VerticalAlignment="Top" Margin="30"/>-->
+        <Label VerticalAlignment="Top"  Width="100" Height="100" Margin="30" x:Name="check"></Label>
     </Grid>
 </Window>
