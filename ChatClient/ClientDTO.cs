@@ -9,7 +9,7 @@ namespace ChatClient
 {
     [Serializable]
 
-    public class ClientDTO: INotifyPropertyChanged
+    public class ClientDTO : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name)
@@ -27,7 +27,7 @@ namespace ChatClient
         public string Email { get { return email; } set { email = value; } }
         private string password;
         public string Password { get { return password; } set { password = value; } }
-     
+        public List<string> friends { get; set; }
 
     }
 }

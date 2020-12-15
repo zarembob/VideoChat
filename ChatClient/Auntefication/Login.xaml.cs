@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
 
+
 namespace ChatClient
 {
     /// <summary>
@@ -22,6 +23,7 @@ namespace ChatClient
     /// </summary>
     public partial class Login : Window
     {
+        ClientHelper helper=new ClientHelper();
         private const int port = 2020;
         public Login()
         {
@@ -29,23 +31,18 @@ namespace ChatClient
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Option("Login");
+            helper.Option("Login");
             var client = new ClientDTO
             {
                 //Username = username.Text,
                 Email = email.Text,
                 Password = password.Password,
             };
-            var TCP = new TcpClient(Dns.GetHostName(), port);
-            using (var stream = TCP.GetStream())
-            {
-                var serializer = new XmlSerializer(client.GetType());
-                serializer.Serialize(stream, client);
-            }
-            TCP.Close();
-            Option("Check");
-            var callbackString = AcceptCallback();
-            CheckResult(callbackString);
+
+            helper.SendClient(client);
+            helper.Option("Check");
+            var callbackString = helper.AcceptCallback();
+            helper.CheckResult(callbackString);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -53,42 +50,9 @@ namespace ChatClient
             this.Content = new Register();
         }
 
-        private void Option(string str)
-        {
-            var client = new TcpClient(Dns.GetHostName(), port);
-            using (var stream = client.GetStream())
-            {
-                var serializer1 = new XmlSerializer(typeof(string));
-                serializer1.Serialize(stream, str);
-            }
-            client.Close();
-        }
-        private string AcceptCallback()
-        {
-            string response;
-            var client = new TcpClient(Dns.GetHostName(), port);
 
-            using (var stream = client.GetStream())
-            {
-                var serializer1 = new XmlSerializer(typeof(string));
-                response = (string)serializer1.Deserialize(stream);
-            }
-            return response;
-        }
-        private void CheckResult(string callbackString)
-        {
-            if (callbackString == "Granted")
-            {
-                
-                MainWindow main = new MainWindow();
-                main.Show();
-            }
-            else if (callbackString == "Denied")
-            {
-                check.Content = "Invalid data. Try 1 mo time.";
 
-            }
-        }
+
 
     }
 }
