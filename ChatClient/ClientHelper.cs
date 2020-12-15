@@ -28,8 +28,7 @@ namespace ChatClient
         {
             if (callbackString == "Granted")
             {
-
-                MainWindow main = new MainWindow();
+                MainWindow main = new MainWindow(new ClientDTO());
                 main.Show();
             }
             else if (callbackString == "Denied")
@@ -38,7 +37,22 @@ namespace ChatClient
 
             }
         }
-        
+        public void CheckResultLogin(ref ClientDTO client)
+        {
+            if (client.Friends[0] == "Granted")
+            {
+                client.Username = client.Friends[1];
+
+                MainWindow main = new MainWindow(client);
+                main.Show();
+
+            }
+            else if (client.Friends[0] != "Granted" )
+            {
+                Check = "Invalid data.";
+
+            }
+        }
         public string AcceptCallback()
         {
             string response;
@@ -51,8 +65,16 @@ namespace ChatClient
             }
             return response;
         }
-       // public List<string> AcceptCallbackLogin()
-       // {
+        public List<string> AcceptCallbackLogin()
+        {
+            List<string> response;
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(List<string>));
+                response = (List<string>)serializer1.Deserialize(stream);
+            }
+            return response;
 
       //  }
         public void Option(string str)

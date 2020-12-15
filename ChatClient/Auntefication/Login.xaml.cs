@@ -23,7 +23,7 @@ namespace ChatClient
     /// </summary>
     public partial class Login : Window
     {
-        ClientHelper helper=new ClientHelper();
+        ClientHelper helper = new ClientHelper();
         private const int port = 2020;
         public Login()
         {
@@ -41,18 +41,13 @@ namespace ChatClient
 
             helper.SendClient(client);
             helper.Option("Check");
-            var callbackString = helper.AcceptCallback();
-            helper.CheckResult(callbackString);
+            client.Friends = helper.AcceptCallbackLogin();
+            helper.CheckResultLogin(ref client);
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             this.Content = new Register();
         }
-
-
-
-
-
     }
 }
