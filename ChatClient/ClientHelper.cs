@@ -28,7 +28,6 @@ namespace ChatClient
         {
             if (callbackString == "Granted")
             {
-
                 MainWindow main = new MainWindow(new ClientDTO());
                 main.Show();
             }
