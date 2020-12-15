@@ -38,7 +38,7 @@ namespace ChatClient
 
             }
         }
-        
+
         public string AcceptCallback()
         {
             string response;
@@ -53,6 +53,14 @@ namespace ChatClient
         }
         public List<string> AcceptCallbackLogin()
         {
+            List<string> response;
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(List<string>));
+                response = (List<string>)serializer1.Deserialize(stream);
+            }
+            return response;
 
         }
         public void Option(string str)
