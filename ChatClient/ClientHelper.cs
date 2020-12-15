@@ -76,7 +76,7 @@ namespace ChatClient
             }
             return response;
 
-      //  }
+        }
         public void Option(string str)
         {
             var client = new TcpClient(Dns.GetHostName(), port);

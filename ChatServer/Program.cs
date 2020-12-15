@@ -25,7 +25,7 @@ namespace ChatServer
         private static void StartService()
         {
             var dbHelper = new DBHelper();
-
+            List<string> LoginFriendNames = new List<string>();
             ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
             string res = "";
             server = new TcpListener(ip, port);
@@ -91,15 +91,16 @@ namespace ChatServer
                             Password = client2.Password,
                             friends = dbHelper.GetFriends(client2.Email)
                         };
-                        var l = dbHelper.GetFriends(client2.Email);
-                        Console.WriteLine(l.Count);
-                        for (int i = 0; i < l.Count; i++)
-                        {
-
-                            Console.WriteLine(l[i].Name);
-                        }
+                     
                         if (dbHelper.IsLogin(c))
                         {
+                            var l = dbHelper.GetFriends(client2.Email);
+                            LoginFriendNames.Add("Granted");
+                            LoginFriendNames.Add(dbHelper.GetUserName(c));
+                            foreach (var item in l.ToList())
+                            {
+                                LoginFriendNames.Add(item.Name);
+                            }
                             isLogin = true;
                             Console.WriteLine();
                         }
@@ -110,18 +111,18 @@ namespace ChatServer
                     }
                     else if (res == "Check")
                     {
-                        var serializer = new XmlSerializer(typeof(string));
+                        var serializer = new XmlSerializer(typeof(List<string>));
                         if (isLogin)
                         {
-                            serializer.Serialize(stream, "Granted");
+                            serializer.Serialize(stream, LoginFriendNames);
                             Console.WriteLine("Granted");
                         }
-                        else
-                        {
-                            serializer.Serialize(stream, "Denied");
-                            Console.WriteLine("Denied");
-
-                        }
+                        // else
+                        // {
+                        //     serializer.Serialize(stream, "Denied");
+                        //     Console.WriteLine("Denied");
+                        //
+                        // }
                     }
                     else if (res == "CheckRegister")
                     {

@@ -28,6 +28,11 @@ namespace ChatServer
           var list = from x in Context.Friends where x.ClientEmail == Email select x;
           return list.ToList();
         }
+        public string GetUserName(Client c)
+        {
+            var name = from x in Context.Clients where x.Email == c.Email select x.Name;
+            return name.ToString();
+        }
         public bool IsLogin(Client c)
         {
             bool flag = false;
