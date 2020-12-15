@@ -39,19 +39,22 @@ namespace ChatClient
             }
         }
         
-        public T AcceptCallback<T>()
+        public string AcceptCallback()
         {
-            T response;
+            string response;
             var client = new TcpClient(Dns.GetHostName(), port);
 
             using (var stream = client.GetStream())
             {
-                var serializer1 = new XmlSerializer(typeof(T));
-                response = (T)serializer1.Deserialize(stream);
+                var serializer1 = new XmlSerializer(typeof(string));
+                response = (string)serializer1.Deserialize(stream);
             }
             return response;
         }
-       
+        public List<string> AcceptCallbackLogin()
+        {
+
+        }
         public void Option(string str)
         {
             var client = new TcpClient(Dns.GetHostName(), port);
