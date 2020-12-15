@@ -96,6 +96,7 @@ namespace ChatServer
                         {
                             var l = dbHelper.GetFriends(client2.Email);
                             LoginFriendNames.Add("Granted");
+                            Console.WriteLine(dbHelper.GetUserName(c));
                             LoginFriendNames.Add(dbHelper.GetUserName(c));
                             foreach (var item in l.ToList())
                             {

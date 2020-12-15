@@ -31,7 +31,7 @@ namespace ChatServer
         public string GetUserName(Client c)
         {
             var name = from x in Context.Clients where x.Email == c.Email select x.Name;
-            return name.ToString();
+            return name.ToList().FirstOrDefault();
         }
         public bool IsLogin(Client c)
         {
