@@ -29,13 +29,16 @@ namespace ChatClient
             _client.Friends.Remove(_client.Username);
             if(_client.Friends.Count==0)
             {
-
+                Friends.Items.Add("No friends");
             }
             this.DataContext = _client;
             
 
         }
 
+        private void Phone_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }

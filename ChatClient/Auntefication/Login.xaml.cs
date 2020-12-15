@@ -49,10 +49,5 @@ namespace ChatClient
         {
             this.Content = new Register();
         }
-
-
-
-
-
     }
 }
