@@ -10,7 +10,6 @@ using System.Xml.Serialization;
 
 namespace ChatServer
 {
-
     class Program
     {
         private const int port = 2020;
@@ -28,9 +27,9 @@ namespace ChatServer
             var dbHelper = new DBHelper();
 
             ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
+            string res = "";
             server = new TcpListener(ip, port);
             server.Start();
-            string res = "";
             bool isLogin = false;
             bool isRegister = false;
             while (true)
@@ -84,6 +83,7 @@ namespace ChatServer
                         };
                         if (!dbHelper.IsLogin(c))
                         {
+
                             isLogin = true;
                         }
                         else
