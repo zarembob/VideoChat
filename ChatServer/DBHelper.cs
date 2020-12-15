@@ -23,6 +23,11 @@ namespace ChatServer
             Context.Friends.Add(f);
             Context.SaveChanges();
         }
+        public List<Friend> GetFriends(string Email)
+        {
+          var list = from x in Context.Friends where x.ClientEmail == Email select x;
+          return list.ToList();
+        }
         public bool IsLogin(Client c)
         {
             bool flag = false;

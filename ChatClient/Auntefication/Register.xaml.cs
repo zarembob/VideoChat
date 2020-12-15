@@ -38,7 +38,7 @@ namespace ChatClient
                 Username = username.Text,
                 Email = email.Text,
                 Password = password.Password,
-                //friends = f
+               
 
             };
             helper.SendClient(client);

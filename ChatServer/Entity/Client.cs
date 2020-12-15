@@ -20,11 +20,7 @@ namespace ChatServer
         [Required]
         public string Password { get; set; }
 
-        public ICollection<Friend> friends { get; set; }
-        public Client()
-        {
-            friends = new List<Friend>();
-        }
+        public virtual ICollection<Friend> friends { get; set; }   
     }
     public class Friend
     {
@@ -33,7 +29,8 @@ namespace ChatServer
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Email { get; set; }
-        public int? ClientId { get; set; }
+        public string Email { get; set; }     
+
+        public string ClientEmail { get; set; }
     }
 }
