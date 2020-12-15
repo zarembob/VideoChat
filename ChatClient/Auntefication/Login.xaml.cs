@@ -79,17 +79,13 @@ namespace ChatClient
         {
             if (callbackString == "Granted")
             {
-                // bruh.Content = "Granted";
+                
                 MainWindow main = new MainWindow();
                 main.Show();
-
-                var tmp = this.Parent;
-                (tmp as Window).Close();
-
             }
             else if (callbackString == "Denied")
             {
-                // bruh.Content = "Denied";
+                check.Content = "Invalid data. Try 1 mo time.";
 
             }
         }

@@ -81,7 +81,7 @@ namespace ChatServer
                             Name = client2.Username,
                             Password = client2.Password
                         };
-                        if (!dbHelper.IsLogin(c))
+                        if (dbHelper.IsLogin(c))
                         {
 
                             isLogin = true;

@@ -23,7 +23,7 @@ namespace ChatServer
             bool flag = false;
             foreach (Client item in Context.Clients)
             {
-                if (item.Name == c.Name && item.Password == c.Password)
+                if (item.Email == c.Email && item.Password == c.Password)
                 {
 
                     flag = true;
