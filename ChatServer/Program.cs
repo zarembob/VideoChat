@@ -78,7 +78,7 @@ namespace ChatServer
                         Client c = new Client
                         {
                             Email = client2.Email,
-                            Name = client2.Username,
+                           // Name = client2.Username,
                             Password = client2.Password
                         };
                         if (dbHelper.IsLogin(c))
