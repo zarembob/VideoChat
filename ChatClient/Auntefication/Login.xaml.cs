@@ -82,8 +82,10 @@ namespace ChatClient
                 // bruh.Content = "Granted";
                 MainWindow main = new MainWindow();
                 main.Show();
-                //var tmp = this.Parent;
-                //(tmp as Window).Close();
+
+                var tmp = this.Parent;
+                (tmp as Window).Close();
+
             }
             else if (callbackString == "Denied")
             {
