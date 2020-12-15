@@ -38,6 +38,7 @@ namespace ChatClient
 
             }
         }
+        
         public string AcceptCallback()
         {
             string response;
@@ -49,6 +50,10 @@ namespace ChatClient
                 response = (string)serializer1.Deserialize(stream);
             }
             return response;
+        }
+        public List<string> AcceptCallbackLogin()
+        {
+
         }
         public void Option(string str)
         {
