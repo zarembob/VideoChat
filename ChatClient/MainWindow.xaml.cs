@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -21,24 +22,57 @@ namespace ChatClient
     public partial class MainWindow : Window
     {
         private const int port = 2020;
+//Зробиш MVVM
+        private ICollection<string> friends = new ObservableCollection<string>();
+        public IEnumerable<string> Friends => friends;
+
         public MainWindow(ClientDTO _client)
         {
-            
+
             InitializeComponent();
-            _client.Friends.Remove("Granted");
-            _client.Friends.Remove(_client.Username);
-            if(_client.Friends.Count==0)
-            {
-                Friends.Items.Add("No friends");
-            }
-            this.DataContext = _client;
-            
+             _client.Friends.Remove("Granted");
+             _client.Friends.Remove(_client.Username);
+             if(_client.Friends.Count==0)
+             {
+                friends.Add("No friends");
+             }
+             this.DataContext = _client;
+
 
         }
 
         private void Phone_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                DragMove();
+            }
+        }
+
+
+        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+                WindowState = WindowState.Maximized;
+            else
+            {
+                WindowState = WindowState.Normal;
+            }
+        }
+
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

@@ -25,8 +25,8 @@ namespace ChatServer
         }
         public List<Friend> GetFriends(string Email)
         {
-          var list = from x in Context.Friends where x.ClientEmail == Email select x;
-          return list.ToList();
+            var list = from x in Context.Friends where x.ClientEmail == Email select x;
+            return list.ToList();
         }
         public string GetUserName(Client c)
         {
