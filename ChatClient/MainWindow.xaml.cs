@@ -127,8 +127,22 @@ namespace ChatClient
             GetFriendData data = new GetFriendData();
             helper.Option(FriendList.SelectedItem.ToString());
             helper.AcceptFriendData(ref data);
-
-
+            TcpClient client = new TcpClient(data.address.ToString(), data.port);
+          
+            string message = currentClient.Username;
+            byte[] dataSend = System.Text.Encoding.ASCII.GetBytes(message);
+            NetworkStream stream = client.GetStream();
+            stream.Write(dataSend, 0, dataSend.Length);
+            dataSend = new byte[256];
+            string response = "";
+            int bytes = stream.Read(dataSend, 0, dataSend.Length);
+            response = System.Text.Encoding.ASCII.GetString(dataSend, 0, bytes);
+            if (response == "true")
+            {
+                this.Content = new Call();
+            }
+            stream.Close();
+            client.Close();
         }
     }
 }
