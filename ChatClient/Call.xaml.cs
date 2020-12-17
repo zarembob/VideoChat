@@ -50,7 +50,7 @@ namespace ChatClient
         #endregion
         private IPAddress adress;
         private int port;
-      //  UdpClient udpClient;
+        //  UdpClient udpClient;
         Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,
 ProtocolType.Udp);
         IPEndPoint p;
@@ -61,7 +61,7 @@ ProtocolType.Udp);
             InitializeComponent();
             p = new IPEndPoint(address, port);
 
-         //   udpClient = new UdpClient();
+            //   udpClient = new UdpClient();
             adress = address;
             this.port = port;
             GetVideoDevices();
@@ -82,12 +82,12 @@ ProtocolType.Udp);
             try
             {
                 BitmapImage bi;
-                BitmapImage friendBi=new BitmapImage();
+                BitmapImage friendBi = new BitmapImage();
                 using (var bitmap = (Bitmap)eventArgs.Frame.Clone())
                 {
                     bi = bitmap.ToBitmapImage();
                 }
-                
+
                 JpegBitmapEncoder encoder = new JpegBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bi));
                 using (MemoryStream ms = new MemoryStream())
@@ -110,10 +110,10 @@ ProtocolType.Udp);
                     friendBi.CacheOption = BitmapCacheOption.OnLoad; // here
                     friendBi.StreamSource = ms;
                     friendBi.EndInit();
-                    
+
                 }
                 //  udpClient.BeginSend(sendBytes, sendBytes.Length, adress.ToString(), port, Callback, udpClient);
-                bi.Freeze(); 
+                bi.Freeze();
                 Dispatcher.BeginInvoke(new ThreadStart(delegate { videoPlayer.Source = bi; }));
                 Dispatcher.BeginInvoke(new ThreadStart(delegate { videoFriend.Source = bi; }));
             }
@@ -140,7 +140,7 @@ ProtocolType.Udp);
         private void SendCallback(IAsyncResult ar)
         {
             var client = ar.AsyncState as Socket;
-          client.EndSend(ar);
+            client.EndSend(ar);
         }
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {

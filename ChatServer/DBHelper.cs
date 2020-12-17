@@ -48,6 +48,29 @@ namespace ChatServer
             return flag;
         }
 
+        public Client GetClient(string name)
+        {
+            foreach(Client c in Context.Clients)
+            {
+                if(c.Name==name)
+                {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public void setIP(string ip,string current)
+        {
+            for (int i = 0; i < Context.Clients.Count(); i++)
+            {
+                if((Context.Clients.ToList())[i].Name==current)
+                {
+                    (Context.Clients.ToList())[i].address = ip;
+                }
+            }
+            Context.SaveChanges();
+        }
         public bool IsRegister(Client c)
         {
             bool flag = false;

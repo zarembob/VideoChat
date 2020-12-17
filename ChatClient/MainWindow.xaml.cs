@@ -71,6 +71,7 @@ namespace ChatClient
             if (check == "true")
             {
                 GetFriendData dataF = new GetFriendData();
+                helper.Option("GetFriendData");
                 helper.Option(data);
                 helper.AcceptFriendData(ref dataF);
                 this.Content = new Call(IPAddress.Parse(dataF.address),dataF.port,currentClient);
@@ -79,7 +80,7 @@ namespace ChatClient
 
         private string CheckData(string data)
         {
-            if (data == "Call")
+           // if (data == "Call")
             foreach (var item in currentClient.Friends)
             {
                 if (data == item)

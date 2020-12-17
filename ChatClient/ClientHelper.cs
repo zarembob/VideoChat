@@ -46,7 +46,7 @@ namespace ChatClient
                 client.Port = AcceptPort();
                 Option("Ip");
                 client.address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString();
-                SendIp(IPAddress.Parse(client.address),client.Username);
+                SendIp(client.address,client.Username);
                 MainWindow main = new MainWindow(client);
                 main.Show();
 
@@ -57,16 +57,16 @@ namespace ChatClient
 
             }
         }
-        private void SendIp(IPAddress add,string name)
+        private void SendIp(string add,string name)
         {
             var client = new TcpClient(Dns.GetHostName(), port);
             using (var stream = client.GetStream())
             {
-                var serializer1 = new XmlSerializer(typeof(IPAddress));
+                var serializer1 = new XmlSerializer(typeof(string));
                 serializer1.Serialize(stream, add);
             }
             client.Close();
-            Option(name);
+           // Option(name);
         }
         public string AcceptCallback()
         {

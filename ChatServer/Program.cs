@@ -34,6 +34,7 @@ namespace ChatServer
             bool isLogin = false;
             bool isRegister = false;
             int currentPort=0;
+            string currentUser="";
             while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
@@ -99,7 +100,7 @@ namespace ChatServer
                             
                         };
                         currentPort = c.Port;
-                     
+                        currentUser = dbHelper.GetUserName(c);
                         if (dbHelper.IsLogin(c))
                         {
                             var l = dbHelper.GetFriends(client2.Email);
@@ -153,6 +154,18 @@ namespace ChatServer
                         var serializer = new XmlSerializer(typeof(int));
                         serializer.Serialize(stream, currentPort);
 
+                    }
+                    else if(res=="Ip")
+                    {
+                        var serializer = new XmlSerializer(typeof(string));
+                        var ip = (string)serializer.Deserialize(stream);
+                        dbHelper.setIP(ip,currentUser);
+                    }
+                    else if(res== "GetFriendData")
+                    {
+                        var serializer = new XmlSerializer(typeof(string));
+                        var name = (string)serializer.Deserialize(stream);
+                        dbHelper.GetClient(name);
                     }
 
                 }

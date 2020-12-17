@@ -55,6 +55,7 @@
     <Compile Include="DBHelper.cs" />
     <Compile Include="Entity\Client.cs" />
     <Compile Include="Entity\ClientModel.cs" />
+    <Compile Include="Entity\GetFriendData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
