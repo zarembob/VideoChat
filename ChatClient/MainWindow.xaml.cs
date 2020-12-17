@@ -25,6 +25,7 @@ namespace ChatClient
         private ClientDTO currentClient;
         private static TcpListener server;
         private static ClientHelper helper;
+       
         public MainWindow(ClientDTO _client)
         {
 
@@ -69,8 +70,10 @@ namespace ChatClient
             stream.Write(msg, 0, msg.Length);
             if (check == "true")
             {
-                Phone.Content = true;
-                this.Content = new Call();
+                GetFriendData dataF = new GetFriendData();
+                helper.Option(data);
+                helper.AcceptFriendData(ref dataF);
+                this.Content = new Call(dataF.address,dataF.port,currentClient);
             }
         }
 
@@ -80,7 +83,7 @@ namespace ChatClient
             {
                 if (data == item)
                 {
-
+                    
                     return "true";
                 }
 
@@ -138,8 +141,9 @@ namespace ChatClient
             response = System.Text.Encoding.ASCII.GetString(dataSend, 0, bytes);
             if (response == "true")
             {
-                Phone.Content = "true";
-                //  this.Content = new Call();
+                //Phone.Content = "true";
+                  this.Content = new Call(data.address,data.port,currentClient);
+
             }
             stream.Close();
             client.Close();
