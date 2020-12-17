@@ -42,16 +42,31 @@ namespace ChatClient
             if (client.Friends[0] == "Granted")
             {
                 client.Username = client.Friends[1];
+                Option("Port");
+                client.Port = AcceptPort();
+                Option("Ip");
+                client.address = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
+
 
                 MainWindow main = new MainWindow(client);
                 main.Show();
 
             }
-            else if (client.Friends[0] != "Granted" )
+            else if (client.Friends[0] != "Granted")
             {
                 Check = "Invalid data.";
 
             }
+        }
+        private void SendIp(IPAddress add)
+        {
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(IPAddress));
+                serializer1.Serialize(stream, add);
+            }
+            client.Close();
         }
         public string AcceptCallback()
         {
@@ -62,6 +77,17 @@ namespace ChatClient
             {
                 var serializer1 = new XmlSerializer(typeof(string));
                 response = (string)serializer1.Deserialize(stream);
+            }
+            return response;
+        }
+        public int AcceptPort()
+        {
+            int response;
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(int));
+                response = (int)serializer1.Deserialize(stream);
             }
             return response;
         }
@@ -97,6 +123,19 @@ namespace ChatClient
             }
             TCP.Close();
         }
+
+        internal void AcceptFriendData(ref GetFriendData data)
+        {
+            GetFriendData response;
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(GetFriendData));
+                response = (GetFriendData)serializer1.Deserialize(stream);
+            }
+            data = response;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name)
         {
@@ -106,6 +145,7 @@ namespace ChatClient
                 handler(this, new PropertyChangedEventArgs(name));
             }
         }
+
     }
 }
 

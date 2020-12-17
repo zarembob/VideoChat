@@ -22,8 +22,10 @@ namespace ChatClient
     public partial class MainWindow : Window
     {
         private const int port = 2020;
-        private static TcpListener server = new TcpListener(IPAddress.Any, port);
         private ClientDTO currentClient;
+        private static TcpListener server;
+
+        private static ClientHelper helper;
         public MainWindow(ClientDTO _client)
         {
 
@@ -32,11 +34,13 @@ namespace ChatClient
             _client.Friends.Remove("Granted");
             this.DataContext = _client;
             currentClient = _client;
+            server = new TcpListener(currentClient.address, currentClient.Port);
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-         
+            server.Stop();
 
         }
+
 
         private void DoAcceptTcpClientCallback(IAsyncResult ar)
         {
@@ -59,19 +63,29 @@ namespace ChatClient
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
                 data = data.ToUpper();
+                i = stream.Read(bytes, 0, bytes.Length);
             }
-            CheckData(data);
+            string check = CheckData(data);
+            byte[] msg = System.Text.Encoding.ASCII.GetBytes(check);
+            stream.Write(msg, 0, msg.Length);
+            if (check == "true")
+            {
+                this.Content = new Call();
+            }
         }
 
-        private void CheckData(string data)
+        private string CheckData(string data)
         {
             foreach (var item in currentClient.Friends)
             {
                 if (data == item)
                 {
 
+                    return "true";
                 }
+
             }
+            return "false";
         }
 
         private void Phone_Click(object sender, RoutedEventArgs e)
@@ -110,7 +124,11 @@ namespace ChatClient
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Content = new Call();
+            GetFriendData data = new GetFriendData();
+            helper.Option(FriendList.SelectedItem.ToString());
+            helper.AcceptFriendData(ref data);
+
+
         }
     }
 }
