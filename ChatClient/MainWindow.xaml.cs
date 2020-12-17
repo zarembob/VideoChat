@@ -23,6 +23,7 @@ namespace ChatClient
     {
         private const int port = 2020;
         private static TcpListener server = new TcpListener(IPAddress.Any, port);
+        private ClientDTO currentClient;
         public MainWindow(ClientDTO _client)
         {
 
@@ -30,9 +31,11 @@ namespace ChatClient
             _client.Friends.Remove(_client.Username);
             _client.Friends.Remove("Granted");
             this.DataContext = _client;
+            currentClient = _client;
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-            
+         
+
         }
 
         private void DoAcceptTcpClientCallback(IAsyncResult ar)
@@ -46,7 +49,7 @@ namespace ChatClient
         private void GetData(TcpClient _client)
         {
             byte[] bytes = new byte[1024];
-            string data="";
+            string data = "";
             NetworkStream stream = _client.GetStream();
             int i;
             i = stream.Read(bytes, 0, bytes.Length);
@@ -54,21 +57,20 @@ namespace ChatClient
             {
 
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine(String.Format("Received: {0}", data));
-
 
                 data = data.ToUpper();
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-             
             }
             CheckData(data);
         }
 
         private void CheckData(string data)
         {
-           if(data=="Call")
+            foreach (var item in currentClient.Friends)
             {
+                if (data == item)
+                {
 
+                }
             }
         }
 
