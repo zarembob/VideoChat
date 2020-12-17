@@ -81,7 +81,7 @@ namespace ChatClient
 
         private string CheckData(string data)
         {
-            if (data == "Call")
+           
                 foreach (var item in currentClient.Friends)
                 {
                     if (data == item)
