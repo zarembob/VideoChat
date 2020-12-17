@@ -69,6 +69,8 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Grid Margin="15,0" MinHeight="75">
@@ -122,6 +124,8 @@
                 <ListBox x:Name="FriendList" ItemsSource="{Binding Friends, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"  Grid.Row="2">
                 </ListBox>
                 <Button x:Name="Phone" Grid.Row="3" Click="Button_Click">Phone</Button>
+                <TextBox x:Name="AddFriend" Grid.Row="4"></TextBox>
+                <Button Grid.Row="5" Click="Button_Click_1">Add </Button>
             </Grid>
            
         </Grid>

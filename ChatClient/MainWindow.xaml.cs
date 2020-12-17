@@ -24,8 +24,8 @@ namespace ChatClient
         private const int port = 2020;
         private ClientDTO currentClient;
         private static TcpListener server;
-        private static ClientHelper helper;
-       
+        private static ClientHelper helper = new ClientHelper();
+
         public MainWindow(ClientDTO _client)
         {
 
@@ -37,7 +37,7 @@ namespace ChatClient
             server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-           // server.Stop();
+            // server.Stop();
 
         }
 
@@ -73,22 +73,24 @@ namespace ChatClient
                 GetFriendData dataF = new GetFriendData();
                 helper.Option(data);
                 helper.AcceptFriendData(ref dataF);
-                this.Content = new Call(dataF.address,dataF.port,currentClient);
+                IPAddress address = IPAddress.Parse(dataF.address);
+                server.Stop();
+                this.Content = new Call(address, dataF.port, currentClient);
             }
         }
 
         private string CheckData(string data)
         {
             if (data == "Call")
-            foreach (var item in currentClient.Friends)
-            {
-                if (data == item)
+                foreach (var item in currentClient.Friends)
                 {
-                    
-                    return "true";
-                }
+                    if (data == item)
+                    {
 
-            }
+                        return "true";
+                    }
+
+                }
             return "false";
         }
 
@@ -142,12 +144,28 @@ namespace ChatClient
             response = System.Text.Encoding.ASCII.GetString(dataSend, 0, bytes);
             if (response == "true")
             {
-                //Phone.Content = "true";
-                  this.Content = new Call(data.address,data.port,currentClient);
+                IPAddress address = IPAddress.Parse(data.address);
+                this.Content = new Call(address, data.port, currentClient);
 
             }
             stream.Close();
             client.Close();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            helper.Option("Add");
+            helper.Option(AddFriend.Text);
+            string re = helper.AcceptCallback();
+            if(re=="Granted")
+            {
+                currentClient.Friends.Add(AddFriend.Text);
+                AddFriend.Text = "";
+            }
+            else
+            {
+                AddFriend.Text = "haram";
+            }
         }
     }
 }
