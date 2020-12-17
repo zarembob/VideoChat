@@ -70,7 +70,7 @@ namespace ChatClient
             stream.Write(msg, 0, msg.Length);
             if (check == "true")
             {
-                GetFriendData dataF = new GetFriendData();
+                GetFriendDataDTO dataF = new GetFriendDataDTO();
                 helper.Option("GetFriendData");
                 helper.Option(data);
                 helper.Option("SetFriendData");
@@ -83,16 +83,16 @@ namespace ChatClient
 
         private string CheckData(string data)
         {
-           
-                foreach (var item in currentClient.Friends)
+
+            foreach (var item in currentClient.Friends)
+            {
+                if (data == item)
                 {
-                    if (data == item)
-                    {
 
-                        return "true";
-                    }
-
+                    return "true";
                 }
+
+            }
             return "false";
         }
 
@@ -132,7 +132,7 @@ namespace ChatClient
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            GetFriendData data = new GetFriendData();
+            GetFriendDataDTO data = new GetFriendDataDTO();
             helper.Option("GetFriendData");
             helper.Option(FriendList.SelectedItem.ToString());
             helper.Option("SetFriendData");
@@ -162,10 +162,10 @@ namespace ChatClient
             helper.Option(AddFriend.Text);
             helper.Option("GetFriend");
             string re = helper.AcceptCallback();
-            if(re=="Granted") 
+            if (re == "Granted")
             {
                 currentClient.Friends.Add(AddFriend.Text);
-                
+
                 AddFriend.Text = "Yes";
             }
             else

@@ -114,14 +114,14 @@ namespace ChatClient
             TCP.Close();
         }
 
-        internal void AcceptFriendData(ref GetFriendData data)
+        internal void AcceptFriendData(ref GetFriendDataDTO data)
         {
-            GetFriendData response;
+            GetFriendDataDTO response;
             var client = new TcpClient(Dns.GetHostName(), port);
             using (var stream = client.GetStream())
             {
-                var serializer1 = new XmlSerializer(typeof(GetFriendData));
-                response = (GetFriendData)serializer1.Deserialize(stream);
+                var serializer1 = new XmlSerializer(typeof(GetFriendDataDTO));
+                response = (GetFriendDataDTO)serializer1.Deserialize(stream);
             }
             data = response;
         }
