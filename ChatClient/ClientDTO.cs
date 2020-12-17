@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,11 +38,15 @@ namespace ChatClient
                 OnPropertyChanged("friends");
             }
         }
+        public int Port { get; set; }
+        public IPAddress address  { get; set; }
     }
     public class FriendDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
+        public int Port { get; set; }
+        public long IpAddress { get; set; }
     }
 }
