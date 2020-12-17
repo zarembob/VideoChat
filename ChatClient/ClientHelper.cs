@@ -45,8 +45,8 @@ namespace ChatClient
                 Option("Port");
                 client.Port = AcceptPort();
                 Option("Ip");
-                client.address = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0];
-                SendIp(client.address,client.Username);
+                client.address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString();
+                SendIp(IPAddress.Parse(client.address),client.Username);
                 MainWindow main = new MainWindow(client);
                 main.Show();
 

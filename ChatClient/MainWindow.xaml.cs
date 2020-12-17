@@ -73,7 +73,7 @@ namespace ChatClient
                 GetFriendData dataF = new GetFriendData();
                 helper.Option(data);
                 helper.AcceptFriendData(ref dataF);
-                this.Content = new Call(dataF.address,dataF.port,currentClient);
+                this.Content = new Call(IPAddress.Parse(dataF.address),dataF.port,currentClient);
             }
         }
 
@@ -143,7 +143,7 @@ namespace ChatClient
             if (response == "true")
             {
                 //Phone.Content = "true";
-                  this.Content = new Call(data.address,data.port,currentClient);
+                  this.Content = new Call(IPAddress.Parse(data.address),data.port,currentClient);
 
             }
             stream.Close();
