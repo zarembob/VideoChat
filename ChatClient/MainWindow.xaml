@@ -119,7 +119,7 @@
                         VerticalContentAlignment="Center"
                        ></TextBox>
                 </Border>
-                <ListBox ItemsSource="{Binding Friends, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"  Grid.Row="2">
+                <ListBox x:Name="FriendList" ItemsSource="{Binding Friends, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"  Grid.Row="2">
                 </ListBox>
                 <Button Grid.Row="3" Click="Button_Click">Phone</Button>
             </Grid>
