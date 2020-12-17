@@ -59,6 +59,7 @@ namespace ChatServer
             }
             return null;
         }
+        
 
         public void setIP(string ip,string current)
         {

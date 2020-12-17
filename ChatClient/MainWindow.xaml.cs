@@ -32,8 +32,8 @@ namespace ChatClient
             InitializeComponent();
             _client.Friends.Remove(_client.Username);
             _client.Friends.Remove("Granted");
-            this.DataContext = _client;
             currentClient = _client;
+            this.DataContext = currentClient;
             server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
@@ -160,11 +160,13 @@ namespace ChatClient
         {
             helper.Option("Add");
             helper.Option(AddFriend.Text);
+            helper.Option("GetFriend");
             string re = helper.AcceptCallback();
-            if(re=="Granted")
+            if(re=="Granted") 
             {
                 currentClient.Friends.Add(AddFriend.Text);
-                AddFriend.Text = "";
+                
+                AddFriend.Text = "Yes";
             }
             else
             {

@@ -37,6 +37,7 @@ namespace ChatServer
             int currentPort = 0;
             string currentUser = "";
             Client currentClient = new Client();
+            Client currentFriend = new Client();
             while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
@@ -72,16 +73,8 @@ namespace ChatServer
                             isRegister = true;
                             dbHelper.AddClient(c);
                             Console.WriteLine("Finished Register");
-                            Friend f = new Friend()
-                            {
-                                Name = "Sasha",
-                                Email = "qwerty",
-                                ClientEmail = c.Email,
-                                Port = 2021,
-                                address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString()
 
-                            };
-                            dbHelper.AddFriend(f);
+                          
                         }
                         else
                         {
@@ -177,9 +170,34 @@ namespace ChatServer
                         var serializer = new XmlSerializer(typeof(GetFriendData));
                         serializer.Serialize(stream, getFriend);
                     }
+                    else if (res == "Add")
+                    {
+                        var serializer = new XmlSerializer(typeof(string));
+                        var friend = (string)serializer.Deserialize(stream);
+                        currentFriend = dbHelper.GetClient(friend);
 
+                    }
+                    else if (res == "GetFriend")
+                    {
+                        if (currentFriend != null)
+                        {
+                            Friend f = new Friend()
+                            {
+                                Name = currentFriend.Name,
+                                Email = currentFriend.Email,
+                                ClientEmail = currentClient.Email,
+                                Port = 2021,
+                                address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString()
+                            };  dbHelper.AddFriend(f);
+                            var serializer = new XmlSerializer(typeof(string));
+                            serializer.Serialize(stream, "Granted");
+                        }
+
+                    }
                 }
+
             }
         }
     }
 }
+
