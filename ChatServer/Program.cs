@@ -1,4 +1,5 @@
 ﻿using ChatClient;
+using ChatServer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace ChatServer
 
         private static void StartService()
         {
-            
+
             var dbHelper = new DBHelper();
             List<string> LoginFriendNames = new List<string>();
             ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
@@ -33,8 +34,9 @@ namespace ChatServer
             server.Start();
             bool isLogin = false;
             bool isRegister = false;
-            int currentPort=0;
-            string currentUser="";
+            int currentPort = 0;
+            string currentUser = "";
+            Client currentClient = new Client();
             while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
@@ -61,8 +63,8 @@ namespace ChatServer
                             Email = client2.Email,
                             Name = client2.Username,
                             Password = client2.Password,
-                            Port=client2.Port,
-                            address=""
+                            Port = client2.Port,
+                            address = ""
 
                         };
                         if (!dbHelper.IsRegister(c))
@@ -75,10 +77,10 @@ namespace ChatServer
                                 Name = "Sasha",
                                 Email = "qwerty",
                                 ClientEmail = c.Email,
-                                Port=2021,
+                                Port = 2021,
                                 address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString()
 
-                        };
+                            };
                             dbHelper.AddFriend(f);
                         }
                         else
@@ -96,8 +98,8 @@ namespace ChatServer
                             //Name = client2.Username,
                             Password = client2.Password,
                             friends = dbHelper.GetFriends(client2.Email),
-                            Port=client2.Port
-                            
+                            Port = client2.Port
+
                         };
                         currentPort = c.Port;
                         currentUser = dbHelper.GetUserName(c);
@@ -149,23 +151,31 @@ namespace ChatServer
 
                         }
                     }
-                    else if(res=="Port")
+                    else if (res == "Port")
                     {
                         var serializer = new XmlSerializer(typeof(int));
                         serializer.Serialize(stream, currentPort);
 
                     }
-                    else if(res=="Ip")
+                    else if (res == "Ip")
                     {
                         var serializer = new XmlSerializer(typeof(string));
                         var ip = (string)serializer.Deserialize(stream);
-                        dbHelper.setIP(ip,currentUser);
+                        dbHelper.setIP(ip, currentUser);
                     }
-                    else if(res== "GetFriendData")
+                    else if (res == "GetFriendData")
                     {
                         var serializer = new XmlSerializer(typeof(string));
                         var name = (string)serializer.Deserialize(stream);
-                        dbHelper.GetClient(name);
+                        currentClient = dbHelper.GetClient(name);
+                    }
+                    else if (res == "SetFriendData")
+                    {
+                        GetFriendData getFriend = new GetFriendData();
+                        getFriend.address = currentClient.address;
+                        getFriend.port = currentClient.Port;
+                        var serializer = new XmlSerializer(typeof(GetFriendData));
+                        serializer.Serialize(stream, getFriend);
                     }
 
                 }

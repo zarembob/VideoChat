@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChatServer.Entity
 {
-    class GetFriendData
+    public class GetFriendData
     {
         public string address { get; set; }
         public int port { get; set; }

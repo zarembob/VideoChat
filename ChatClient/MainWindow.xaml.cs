@@ -25,7 +25,7 @@ namespace ChatClient
         private ClientDTO currentClient;
         private static TcpListener server;
         private static ClientHelper helper;
-       
+
         public MainWindow(ClientDTO _client)
         {
 
@@ -37,7 +37,7 @@ namespace ChatClient
             server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-           // server.Stop();
+            // server.Stop();
 
         }
 
@@ -73,19 +73,20 @@ namespace ChatClient
                 GetFriendData dataF = new GetFriendData();
                 helper.Option("GetFriendData");
                 helper.Option(data);
+                helper.Option("SetFriendData");
                 helper.AcceptFriendData(ref dataF);
-                this.Content = new Call(IPAddress.Parse(dataF.address),dataF.port,currentClient);
+                this.Content = new Call(IPAddress.Parse(dataF.address), dataF.port, currentClient);
             }
         }
 
         private string CheckData(string data)
         {
-           // if (data == "Call")
+            // if (data == "Call")
             foreach (var item in currentClient.Friends)
             {
                 if (data == item)
                 {
-                    
+
                     return "true";
                 }
 
@@ -130,7 +131,9 @@ namespace ChatClient
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             GetFriendData data = new GetFriendData();
+            helper.Option("GetFriendData");
             helper.Option(FriendList.SelectedItem.ToString());
+            helper.Option("SetFriendData");
             helper.AcceptFriendData(ref data);
             TcpClient client = new TcpClient(data.address.ToString(), data.port);
             string message = currentClient.Username;
@@ -144,7 +147,7 @@ namespace ChatClient
             if (response == "true")
             {
                 //Phone.Content = "true";
-                  this.Content = new Call(IPAddress.Parse(data.address),data.port,currentClient);
+                this.Content = new Call(IPAddress.Parse(data.address), data.port, currentClient);
 
             }
             stream.Close();
