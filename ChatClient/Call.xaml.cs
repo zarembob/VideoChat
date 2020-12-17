@@ -49,6 +49,8 @@ namespace ChatClient
         public Call()
         {
             InitializeComponent();
+            GetVideoDevices();
+            this.DataContext = this;
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
