@@ -34,7 +34,6 @@ namespace ChatClient
             currentClient = _client;
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-         
 
         }
 
@@ -59,12 +58,15 @@ namespace ChatClient
                 data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
                 data = data.ToUpper();
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+
             }
             CheckData(data);
         }
 
         private void CheckData(string data)
         {
+            if (data == "Call")
             foreach (var item in currentClient.Friends)
             {
                 if (data == item)
