@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
-        <Image x:Name="videoPlayer" Margin="10,10,10,87" />
+        <Image x:Name="videoPlayer" Margin="42,10,454,87" />
+        <Image x:Name="videoFriend" Margin="454,10,42,87" />
         <ComboBox x:Name="comboBox"
                   Width="167"
                   Height="33"

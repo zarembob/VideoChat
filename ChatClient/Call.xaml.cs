@@ -1,6 +1,7 @@
 ﻿using AForge.Video;
 using AForge.Video.DirectShow;
 using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -18,6 +19,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Net.Sockets;
+using System.IO;
 
 namespace ChatClient
 {
@@ -45,12 +48,24 @@ namespace ChatClient
         private IVideoSource _videoSource;
 
         #endregion
-
-        public Call()
+        private IPAddress adress;
+        private int port;
+      //  UdpClient udpClient;
+        Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,
+ProtocolType.Udp);
+        IPEndPoint p;
+        byte[] sendBytes;
+        byte[] receiveBytes;
+        public Call(IPAddress address, int port, ClientDTO client)
         {
             InitializeComponent();
+            p = new IPEndPoint(address, port);
+
+         //   udpClient = new UdpClient();
+            adress = address;
+            this.port = port;
             GetVideoDevices();
-            this.DataContext = this;
+
         }
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -67,12 +82,40 @@ namespace ChatClient
             try
             {
                 BitmapImage bi;
+                BitmapImage friendBi=new BitmapImage();
                 using (var bitmap = (Bitmap)eventArgs.Frame.Clone())
                 {
                     bi = bitmap.ToBitmapImage();
                 }
-                bi.Freeze(); // avoid cross thread operations and prevents leaks
+                
+                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(bi));
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    encoder.Save(ms);
+                    sendBytes = ms.ToArray();
+                }
+                try
+                {
+                    sock.BeginConnect(p, ConnectionCallback, sock);
+                }
+                catch (SocketException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                using (var ms = new System.IO.MemoryStream(receiveBytes))
+                {
+
+                    friendBi.BeginInit();
+                    friendBi.CacheOption = BitmapCacheOption.OnLoad; // here
+                    friendBi.StreamSource = ms;
+                    friendBi.EndInit();
+                    
+                }
+                //  udpClient.BeginSend(sendBytes, sendBytes.Length, adress.ToString(), port, Callback, udpClient);
+                bi.Freeze(); 
                 Dispatcher.BeginInvoke(new ThreadStart(delegate { videoPlayer.Source = bi; }));
+                Dispatcher.BeginInvoke(new ThreadStart(delegate { videoFriend.Source = bi; }));
             }
             catch (Exception exc)
             {
@@ -81,6 +124,24 @@ namespace ChatClient
             }
         }
 
+        private void ConnectionCallback(IAsyncResult ar)
+        {
+            var client = ar.AsyncState as Socket;
+            client.EndConnect(ar);
+            client.BeginSend(sendBytes, 0, sendBytes.Length, SocketFlags.None, SendCallback, client);
+            client.BeginReceive(receiveBytes, 0, receiveBytes.Length, SocketFlags.None, ReceiveCallback, client);
+        }
+
+        private void ReceiveCallback(IAsyncResult ar)
+        {
+            receiveBytes = (byte[])ar.AsyncState;
+        }
+
+        private void SendCallback(IAsyncResult ar)
+        {
+            var client = ar.AsyncState as Socket;
+          client.EndSend(ar);
+        }
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {
             StopCamera();
