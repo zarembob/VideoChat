@@ -10,7 +10,7 @@
         Background="Transparent"
         FontSize="15"
         ResizeMode="NoResize"
-        Title="Video Chat"
+        Title="{Binding Username,Mode=OneTime}"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         d:DesignHeight="600" d:DesignWidth="450">
@@ -68,6 +68,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Grid Margin="15,0" MinHeight="75">
@@ -118,16 +119,7 @@
                         VerticalContentAlignment="Center"
                        ></TextBox>
                 </Border>
-                <ListBox ItemsSource="{Binding Friends}"  Grid.Row="2">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel>
-                                <Label Content="{Binding Path=Friends}"/>
-                                <Button Background="Green" DockPanel.Dock="Right" Width="100">Call</Button>
-                                <Button Background="red" DockPanel.Dock="Right" Width="100">Delete</Button>
-                            </DockPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
+                <ListBox ItemsSource="{Binding Friends, UpdateSourceTrigger=PropertyChanged,Mode=OneWay}"  Grid.Row="2">
                 </ListBox>
                 <Button Grid.Row="3" Click="Button_Click">Phone</Button>
             </Grid>

@@ -22,21 +22,14 @@ namespace ChatClient
     public partial class MainWindow : Window
     {
         private const int port = 2020;
-//Зробиш MVVM
-       // private ICollection<string> friends = new ObservableCollection<string>();
-       // public IEnumerable<string> Friends => friends;
-       //
+
         public MainWindow(ClientDTO _client)
         {
 
             InitializeComponent();
-             _client.Friends.Remove("Granted");
-             _client.Friends.Remove(_client.Username);
-             if(_client.Friends.Count==0)
-             {
-                _client.Friends.Add("No friends");
-             }
-             this.DataContext = _client;
+            _client.Friends.Remove(_client.Username);
+            _client.Friends.Remove("Granted");
+            this.DataContext = _client;
 
 
         }

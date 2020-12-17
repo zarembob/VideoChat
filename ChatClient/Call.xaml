@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:ChatClient"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Image x:Name="videoPlayer" Margin="10,0,10,70" />
+    <Grid Background="White">
+        <Image x:Name="videoPlayer" Margin="10,10,10,87" />
         <ComboBox x:Name="comboBox"
                   Width="167"
-                  Height="21"
+                  Height="33"
                   Margin="10,0,0,25"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Bottom"
@@ -19,19 +19,19 @@
                   SelectedItem="{Binding CurrentDevice}" />
         <Label Width="167"
                Height="24"
-               Margin="10,0,0,46"
+               Margin="10,0,0,63"
                HorizontalAlignment="Left"
                VerticalAlignment="Bottom"
                Content="Select video source" />
         <Button Width="67"
-                Height="21"
+                Height="33"
                 Margin="213,0,0,25"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Click="btnStart_Click"
                 Content="Start" />
         <Button Width="67"
-                Height="21"
+                Height="33"
                 Margin="296,0,0,25"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
