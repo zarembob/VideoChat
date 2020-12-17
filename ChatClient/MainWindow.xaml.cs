@@ -23,9 +23,9 @@ namespace ChatClient
     {
         private const int port = 2020;
 //Зробиш MVVM
-        private ICollection<string> friends = new ObservableCollection<string>();
-        public IEnumerable<string> Friends => friends;
-
+       // private ICollection<string> friends = new ObservableCollection<string>();
+       // public IEnumerable<string> Friends => friends;
+       //
         public MainWindow(ClientDTO _client)
         {
 
@@ -34,7 +34,7 @@ namespace ChatClient
              _client.Friends.Remove(_client.Username);
              if(_client.Friends.Count==0)
              {
-                friends.Add("No friends");
+                _client.Friends.Add("No friends");
              }
              this.DataContext = _client;
 
@@ -73,6 +73,11 @@ namespace ChatClient
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Content = new Call();
         }
     }
 }

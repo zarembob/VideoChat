@@ -129,7 +129,10 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                <Button Grid.Row="3" Click="Button_Click">Phone</Button>
             </Grid>
+           
         </Grid>
+      
     </Border>
 </Window>
