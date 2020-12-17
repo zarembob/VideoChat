@@ -38,7 +38,8 @@ namespace ChatClient
                 Username = username.Text,
                 Email = email.Text,
                 Password = password.Password,
-               
+                Port=2020,
+                address = "",
 
             };
             helper.SendClient(client);

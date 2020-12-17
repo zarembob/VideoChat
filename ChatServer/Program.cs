@@ -24,6 +24,7 @@ namespace ChatServer
 
         private static void StartService()
         {
+            
             var dbHelper = new DBHelper();
             List<string> LoginFriendNames = new List<string>();
             ip = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]);
@@ -32,6 +33,7 @@ namespace ChatServer
             server.Start();
             bool isLogin = false;
             bool isRegister = false;
+            int currentPort=0;
             while (true)
             {
                 Console.WriteLine("Waiting for connecting...");
@@ -58,7 +60,8 @@ namespace ChatServer
                             Email = client2.Email,
                             Name = client2.Username,
                             Password = client2.Password,
-
+                            Port=client2.Port,
+                            address=""
 
                         };
                         if (!dbHelper.IsRegister(c))
@@ -70,9 +73,11 @@ namespace ChatServer
                             {
                                 Name = "Sasha",
                                 Email = "qwerty",
-                                ClientEmail = c.Email
+                                ClientEmail = c.Email,
+                                Port=2021,
+                                address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString()
 
-                            };
+                        };
                             dbHelper.AddFriend(f);
                         }
                         else
@@ -89,8 +94,11 @@ namespace ChatServer
                             Email = client2.Email,
                             //Name = client2.Username,
                             Password = client2.Password,
-                            friends = dbHelper.GetFriends(client2.Email)
+                            friends = dbHelper.GetFriends(client2.Email),
+                            Port=client2.Port
+                            
                         };
+                        currentPort = c.Port;
                      
                         if (dbHelper.IsLogin(c))
                         {
@@ -139,6 +147,12 @@ namespace ChatServer
                             Console.WriteLine("Error");
 
                         }
+                    }
+                    else if(res=="Port")
+                    {
+                        var serializer = new XmlSerializer(typeof(int));
+                        serializer.Serialize(stream, currentPort);
+
                     }
 
                 }

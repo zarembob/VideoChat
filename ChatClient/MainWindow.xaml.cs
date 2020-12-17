@@ -33,10 +33,10 @@ namespace ChatClient
             _client.Friends.Remove("Granted");
             this.DataContext = _client;
             currentClient = _client;
-            server = new TcpListener(currentClient.address, currentClient.Port);
+            server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-            server.Stop();
+           // server.Stop();
 
         }
 

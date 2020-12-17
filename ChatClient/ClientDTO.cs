@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ChatClient
 {
@@ -39,7 +40,8 @@ namespace ChatClient
             }
         }
         public int Port { get; set; }
-        public IPAddress address  { get; set; }
+       
+        public string address  { get; set; }
     }
     public class FriendDTO
     {
@@ -47,6 +49,6 @@ namespace ChatClient
         public string Name { get; set; }
         public string Email { get; set; }
         public int Port { get; set; }
-        public long IpAddress { get; set; }
+        public string IpAddress { get; set; }
     }
 }

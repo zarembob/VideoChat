@@ -8,7 +8,7 @@ namespace ChatClient
 {
     class GetFriendData
     {
-        public  IPAddress address { get; set; }
+        public  string address { get; set; }
         public int port { get; set; }
         
     }
