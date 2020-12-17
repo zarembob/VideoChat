@@ -22,7 +22,7 @@ namespace ChatClient
     public partial class MainWindow : Window
     {
         private const int port = 2020;
-
+        private static TcpListener server = new TcpListener(IPAddress.Any, port);
         public MainWindow(ClientDTO _client)
         {
 
@@ -30,8 +30,46 @@ namespace ChatClient
             _client.Friends.Remove(_client.Username);
             _client.Friends.Remove("Granted");
             this.DataContext = _client;
+            server.Start();
+            server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
+            
+        }
+
+        private void DoAcceptTcpClientCallback(IAsyncResult ar)
+        {
+            TcpListener listener = (TcpListener)ar.AsyncState;
+            TcpClient client = listener.EndAcceptTcpClient(ar);
+            GetData(client);
+
+        }
+
+        private void GetData(TcpClient _client)
+        {
+            byte[] bytes = new byte[1024];
+            string data="";
+            NetworkStream stream = _client.GetStream();
+            int i;
+            i = stream.Read(bytes, 0, bytes.Length);
+            while (i != 0)
+            {
+
+                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                Console.WriteLine(String.Format("Received: {0}", data));
 
 
+                data = data.ToUpper();
+                byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+             
+            }
+            CheckData(data);
+        }
+
+        private void CheckData(string data)
+        {
+           if(data=="Call")
+            {
+
+            }
         }
 
         private void Phone_Click(object sender, RoutedEventArgs e)
