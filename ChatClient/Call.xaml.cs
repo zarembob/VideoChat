@@ -48,25 +48,67 @@ namespace ChatClient
         private IVideoSource _videoSource;
 
         #endregion
-        private IPAddress adress;
-        private int port;
-        //  UdpClient udpClient;
-        Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram,
-ProtocolType.Udp);
-        IPEndPoint p;
-        byte[] sendBytes;
-        byte[] receiveBytes;
-        public Call(IPAddress address, int port, ClientDTO client)
+
+        int myPort = 0;
+
+        GetFriendData friend;
+        UdpClient server;
+
+        public Call(GetFriendData data, ClientDTO client)
         {
             InitializeComponent();
-            p = new IPEndPoint(address, port);
-
-            //   udpClient = new UdpClient();
-            adress = address;
-            this.port = port;
+            this.DataContext = this;
+            friend = data;
+            myPort = client.Port;
+            server = new UdpClient(myPort);
+            var thread = new Thread(Receive);
+            thread.IsBackground = true;
+            thread.Start();
             GetVideoDevices();
-
+            // this.Closing += MainWindow_Closing;
         }
+        #region VideoCall
+        private void Receive()
+        {
+            while (true)
+            {
+                IPEndPoint ep = null;
+
+                var data = server.Receive(ref ep);
+                Dispatcher.Invoke(() =>
+                {
+                    MemoryStream byteStream = new MemoryStream(data);
+                    BitmapImage image = new BitmapImage();
+                    image.BeginInit();
+                    image.StreamSource = byteStream;
+                    image.EndInit();
+                    videoFriend.Source = image;
+
+
+                });
+            }
+        }
+
+        public byte[] ImageSourceToBytes(BitmapEncoder encoder, ImageSource imageSource)
+        {
+            byte[] bytes = null;
+            var bitmapSource = imageSource as BitmapSource;
+
+            if (bitmapSource != null)
+            {
+                encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+
+                using (var stream = new MemoryStream())
+                {
+                    encoder.Save(stream);
+                    bytes = stream.ToArray();
+                }
+            }
+
+            return bytes;
+        }
+
+        #endregion
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             StopCamera();
@@ -88,59 +130,27 @@ ProtocolType.Udp);
                     bi = bitmap.ToBitmapImage();
                 }
 
-                JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(bi));
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    encoder.Save(ms);
-                    sendBytes = ms.ToArray();
-                }
-                try
-                {
-                    sock.BeginConnect(p, ConnectionCallback, sock);
-                }
-                catch (SocketException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                using (var ms = new System.IO.MemoryStream(receiveBytes))
+                Dispatcher.Invoke(() =>
                 {
 
-                    friendBi.BeginInit();
-                    friendBi.CacheOption = BitmapCacheOption.OnLoad; // here
-                    friendBi.StreamSource = ms;
-                    friendBi.EndInit();
+                    UdpClient client = new UdpClient();
+                    byte[] sendBytes = new byte[1024];
+                    JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-                }
-                //  udpClient.BeginSend(sendBytes, sendBytes.Length, adress.ToString(), port, Callback, udpClient);
+                    //Thread.Sleep(1000);
+                    sendBytes = ImageSourceToBytes(encoder, bi);
+                    client.Send(sendBytes, sendBytes.Length, friend.address, friend.port);
+                });
+
                 bi.Freeze();
                 Dispatcher.BeginInvoke(new ThreadStart(delegate { videoPlayer.Source = bi; }));
-                Dispatcher.BeginInvoke(new ThreadStart(delegate { videoFriend.Source = bi; }));
+
             }
             catch (Exception exc)
             {
                 MessageBox.Show("Error on _videoSource_NewFrame:\n" + exc.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 StopCamera();
             }
-        }
-
-        private void ConnectionCallback(IAsyncResult ar)
-        {
-            var client = ar.AsyncState as Socket;
-            client.EndConnect(ar);
-            client.BeginSend(sendBytes, 0, sendBytes.Length, SocketFlags.None, SendCallback, client);
-            client.BeginReceive(receiveBytes, 0, receiveBytes.Length, SocketFlags.None, ReceiveCallback, client);
-        }
-
-        private void ReceiveCallback(IAsyncResult ar)
-        {
-            receiveBytes = (byte[])ar.AsyncState;
-        }
-
-        private void SendCallback(IAsyncResult ar)
-        {
-            var client = ar.AsyncState as Socket;
-            client.EndSend(ar);
         }
         private void btnStop_Click(object sender, RoutedEventArgs e)
         {
