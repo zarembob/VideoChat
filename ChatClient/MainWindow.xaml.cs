@@ -37,8 +37,9 @@ namespace ChatClient
 
             Data.client.Friends.Remove(Data.client.Username);
             Data.client.Friends.Remove("Granted");
-            server = new UdpClient(currentClient.Port);
             currentClient = Data.client;
+            server = new UdpClient(currentClient.Port);
+            
             this.DataContext = currentClient;
             var thread = new Thread(BeginListenCall);
             thread.Start();
