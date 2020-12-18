@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatClient.Auntefication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -56,7 +57,9 @@ namespace ChatClient
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            this.Content = new Register();
+            RegisterN r = new RegisterN();
+            r.Show();
+           
         }
     }
 }
