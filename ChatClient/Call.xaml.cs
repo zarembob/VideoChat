@@ -75,7 +75,7 @@ namespace ChatClient
         {
             while (true)
             {
-                IPEndPoint ep = null;
+                IPEndPoint ep = new IPEndPoint(IPAddress.Parse(friend.address),friend.port);
 
                 var data = server.Receive(ref ep);
                 Dispatcher.Invoke(() =>
@@ -138,10 +138,11 @@ namespace ChatClient
                 {
 
                     UdpClient client = new UdpClient();
-                    byte[] sendBytes = new byte[8000];
+                    byte[] sendBytes = new byte[1024];
+
                     JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-
+                    //Thread.Sleep(10);
                     sendBytes = ImageSourceToBytes(encoder, bi);
                     try
                     {
