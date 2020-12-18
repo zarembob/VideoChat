@@ -27,7 +27,7 @@ namespace ChatClient
         private ClientDTO currentClient;
         UdpClient server;
         private static ClientHelper helper = new ClientHelper();
-        Thread thread; 
+        Thread thread;
         public MainWindow()
         {
 
@@ -83,8 +83,8 @@ namespace ChatClient
                         helper.Option("SetFriendData");
                         helper.AcceptFriendData(ref dataF);
                         client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
-                        this.Content = new Call(dataF,currentClient);
-                        
+                        this.Content = new Call(dataF, currentClient);
+
 
                     }
                     else if (CheckData(check) == "false")
@@ -244,10 +244,10 @@ namespace ChatClient
             var data = server.Receive(ref ep);
             MemoryStream byteStream = new MemoryStream(data);
             string check = Encoding.ASCII.GetString(byteStream.ToArray());
-            if(check=="true")
+            if (check == "true")
             {
-                Call call = new Call(dataF,currentClient);
-                
+                Call call = new Call(dataF, currentClient);
+
             }
         }
 
@@ -261,7 +261,7 @@ namespace ChatClient
             {
 
                 currentClient.Friends.Add(AddFriend.Text);
-
+                FriendList.Items.Add(AddFriend.Text);
                 AddFriend.Text = "Yes";
             }
             else
