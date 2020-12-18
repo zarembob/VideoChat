@@ -27,7 +27,7 @@ namespace ChatClient
         private ClientDTO currentClient;
         UdpClient server;
         private static ClientHelper helper = new ClientHelper();
-
+        Thread thread; 
         public MainWindow()
         {
 
@@ -39,17 +39,17 @@ namespace ChatClient
             Data.client.Friends.Remove("Granted");
             currentClient = Data.client;
             server = new UdpClient(currentClient.Port);
-            
+
             this.DataContext = currentClient;
-            var thread = new Thread(BeginListenCall);
+            thread = new Thread(BeginListenCall);
             thread.IsBackground = true;
             thread.Start();
-            
-           // foreach (var item in currentClient.Friends)
-           // {
-           //     FriendList.Items.Add(item);
-           // }
-           
+
+            // foreach (var item in currentClient.Friends)
+            // {
+            //     FriendList.Items.Add(item);
+            // }
+
 
             // server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
             // server.Start();
@@ -58,6 +58,10 @@ namespace ChatClient
 
         }
 
+        private void GetRes()
+        {
+
+        }
         private void BeginListenCall()
         {
             while (true)
@@ -68,8 +72,8 @@ namespace ChatClient
                 Dispatcher.Invoke(() =>
                 {
                     MemoryStream byteStream = new MemoryStream(data);
-                    string check=Encoding.ASCII.GetString(byteStream.ToArray());
-                    if(CheckData(check)=="true")
+                    string check = Encoding.ASCII.GetString(byteStream.ToArray());
+                    if (CheckData(check) == "true")
                     {
                         UdpClient client = new UdpClient();
                         byte[] sendBytes = Encoding.ASCII.GetBytes("true");
@@ -78,10 +82,22 @@ namespace ChatClient
                         helper.Option(check);
                         helper.Option("SetFriendData");
                         helper.AcceptFriendData(ref dataF);
-                        client.Send(sendBytes, sendBytes.Length,dataF.address, dataF.port);
+                        client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
+                        this.Content = new Call(dataF,currentClient);
                         
+
                     }
-                    
+                    else if (CheckData(check) == "false")
+                    {
+                        UdpClient client = new UdpClient();
+                        byte[] sendBytes = Encoding.ASCII.GetBytes("false");
+                        GetFriendDataDTO dataF = new GetFriendDataDTO();
+                        helper.Option("GetFriendData");
+                        helper.Option(check);
+                        helper.Option("SetFriendData");
+                        helper.AcceptFriendData(ref dataF);
+                        client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
+                    }
                     #region Test
                     //BitmapImage image = new BitmapImage();
                     //image.BeginInit();
@@ -93,13 +109,13 @@ namespace ChatClient
                 });
             }
         }
-       // private void DoAcceptTcpClientCallback(IAsyncResult ar)
-       // {
-       //     TcpListener listener = (TcpListener)ar.AsyncState;
-       //     TcpClient client = listener.EndAcceptTcpClient(ar);
-       //     GetData(client);
-       //
-       // }
+        // private void DoAcceptTcpClientCallback(IAsyncResult ar)
+        // {
+        //     TcpListener listener = (TcpListener)ar.AsyncState;
+        //     TcpClient client = listener.EndAcceptTcpClient(ar);
+        //     GetData(client);
+        //
+        // }
 
         private void GetData(TcpClient _client)
         {
@@ -213,7 +229,26 @@ namespace ChatClient
             //client.Close();
             #endregion
 
+            thread.Abort();
 
+            GetFriendDataDTO dataF = new GetFriendDataDTO();
+            helper.Option("GetFriendData");
+            helper.Option(FriendList.SelectedItem.ToString());
+            helper.Option("SetFriendData");
+            helper.AcceptFriendData(ref dataF);
+            UdpClient client = new UdpClient();
+            byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);
+            client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
+
+            IPEndPoint ep = null;
+            var data = server.Receive(ref ep);
+            MemoryStream byteStream = new MemoryStream(data);
+            string check = Encoding.ASCII.GetString(byteStream.ToArray());
+            if(check=="true")
+            {
+                Call call = new Call(dataF,currentClient);
+                
+            }
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
