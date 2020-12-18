@@ -14,7 +14,7 @@ namespace ChatClient
     public class ClientDTO : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
+        public void OnPropertyChanged(string name)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null)
@@ -40,8 +40,8 @@ namespace ChatClient
             }
         }
         public int Port { get; set; }
-       
-        public string address  { get; set; }
+
+        public string address { get; set; }
     }
     public class FriendDTO
     {

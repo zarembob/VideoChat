@@ -116,11 +116,12 @@
                     
                 </Border>
                 <Label Content="{Binding address,UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"></Label>
-                <ListBox ItemsSource="{Binding Friends,UpdateSourceTrigger=PropertyChanged,Mode=OneWay}" x:Name="FriendList"   Grid.Row="2">
+                <ListBox  x:Name="FriendList"   Grid.Row="2">
                 </ListBox>
                 <Button x:Name="Phone" Grid.Row="3" Click="Button_Click">Phone</Button>
                 <TextBox x:Name="AddFriend" Grid.Row="4"></TextBox>
                 <Button Grid.Row="5" Click="Button_Click_1">Add </Button>
+                <Label Background="Orange" Name="FriendD"></Label>
             </Grid>
            
         </Grid>

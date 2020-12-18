@@ -44,7 +44,15 @@ namespace ChatClient
                 Option("Port");
                 client.Port = AcceptPort();
                 Option("Ip");
-                client.address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).MapToIPv4().ToString();
+                var host = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (var ip in host.AddressList)
+                {
+                    if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        client.address = ip.ToString();
+                    }
+                }
+             //   client.address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).MapToIPv6().ToString();
                 Option(client.address);
                 return true;
                 //MainWindow main = new MainWindow(client);
