@@ -19,9 +19,9 @@ using System.Xml.Serialization;
 
 namespace ChatClient
 {
-    /// <summary>
-    /// Логика взаимодействия для Login.xaml
-    /// </summary>
+   
+   
+   
     public partial class Login : Window
     {
         ClientHelper helper = new ClientHelper();
