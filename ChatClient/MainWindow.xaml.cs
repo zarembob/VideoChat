@@ -205,7 +205,7 @@ namespace ChatClient
 
             }
             Dispatcher.Invoke(() => { 
-            this.Content = new Call(dataF, dataC, udpClient);
+            this.Content = new Call(dataF, dataC, server);
             });
             //UdpClient client = new UdpClient();
             //byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);

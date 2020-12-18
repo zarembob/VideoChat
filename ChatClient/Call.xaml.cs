@@ -139,7 +139,7 @@ namespace ChatClient
                     byte[] sendBytes = new byte[1024];
                     JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-                    //Thread.Sleep(1000);
+                    Thread.Sleep(10);
                     sendBytes = ImageSourceToBytes(encoder, bi);
                     client.Send(sendBytes, sendBytes.Length, friend.address, friend.port);
                 });
