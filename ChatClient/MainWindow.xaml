@@ -10,7 +10,7 @@
         Background="Transparent"
         FontSize="15"
         ResizeMode="NoResize"
-        Title="{Binding Username,Mode=OneTime}"
+        Title="{Binding Username,Mode=OneWay}"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
         d:DesignHeight="600" d:DesignWidth="450">

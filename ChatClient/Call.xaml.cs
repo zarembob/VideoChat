@@ -51,10 +51,10 @@ namespace ChatClient
 
         int myPort = 0;
 
-        GetFriendData friend;
+        GetFriendDataDTO friend;
         UdpClient server;
 
-        public Call(GetFriendData data, ClientDTO client)
+        public Call(GetFriendDataDTO data, ClientDTO client)
         {
             InitializeComponent();
             this.DataContext = this;

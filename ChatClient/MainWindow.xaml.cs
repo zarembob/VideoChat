@@ -26,13 +26,16 @@ namespace ChatClient
         private static TcpListener server;
         private static ClientHelper helper = new ClientHelper();
 
-        public MainWindow(ClientDTO _client)
+        public MainWindow()
         {
 
             InitializeComponent();
-            _client.Friends.Remove(_client.Username);
-            _client.Friends.Remove("Granted");
-            currentClient = _client;
+            Login l = new Login();
+            l.ShowDialog();
+
+            Data.client.Friends.Remove(Data.client.Username);
+            Data.client.Friends.Remove("Granted");
+            currentClient = Data.client;
             this.DataContext = currentClient;
             foreach (var item in currentClient.Friends)
             {

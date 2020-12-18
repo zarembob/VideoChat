@@ -79,6 +79,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Auntefication\Data.cs" />
     <Compile Include="Auntefication\Register.xaml.cs">
       <DependentUpon>Register.xaml</DependentUpon>
     </Compile>
