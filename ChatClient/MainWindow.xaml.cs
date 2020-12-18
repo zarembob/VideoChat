@@ -261,7 +261,7 @@ namespace ChatClient
             {
 
                 currentClient.Friends.Add(AddFriend.Text);
-                FriendList.Items.Add(AddFriend.Text);
+                //FriendList.Items.Add(AddFriend.Text);
                 AddFriend.Text = "Yes";
             }
             else
