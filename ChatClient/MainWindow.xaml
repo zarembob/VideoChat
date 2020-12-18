@@ -111,7 +111,7 @@
                     x:Name="searchBoxBorder"
                     FocusManager.FocusedElement="{Binding ElementName=searchQuery}"
                     >
-                    <Label Content="{Binding Port,UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"></Label>
+                   
                     
                     
                 </Border>
