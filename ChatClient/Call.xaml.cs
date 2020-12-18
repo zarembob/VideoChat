@@ -52,16 +52,19 @@ namespace ChatClient
         int myPort = 0;
 
         GetFriendDataDTO friend;
+        GetClientDataDTO clientDTO;
         UdpClient server;
 
-        public Call(GetFriendDataDTO data, GetClientDataDTO client, UdpClient _server)
+        public Call(GetFriendDataDTO data, GetClientDataDTO _client, UdpClient _server)
         {
             Dispatcher.Invoke(() =>
             {
                 InitializeComponent();
                 this.DataContext = this;
                 friend = data;
-                myPort = client.port;
+                clientDTO = _client;
+                myPort = clientDTO.port;
+               // MessageBox.Show(_server.ToString() + data.port.ToString() + _client.port.ToString());
                 server = _server;
                 GetVideoDevices();
             });
@@ -75,17 +78,18 @@ namespace ChatClient
         {
             while (true)
             {
-                IPEndPoint ep = new IPEndPoint(IPAddress.Parse(friend.address),friend.port);
+                IPEndPoint ep = null;
 
                 var data = server.Receive(ref ep);
+                MemoryStream byteStream = new MemoryStream(data);
+                BitmapImage image = new BitmapImage();
+                image.BeginInit();
+                image.StreamSource = byteStream;
+                image.EndInit();
+                image.Freeze();
+               
                 Dispatcher.Invoke(() =>
                 {
-                    MemoryStream byteStream = new MemoryStream(data);
-                    BitmapImage image = new BitmapImage();
-                    image.BeginInit();
-                    image.StreamSource = byteStream;
-                    image.EndInit();
-                    image.Freeze();
                     videoFriend.Source = image;
 
 
@@ -133,6 +137,8 @@ namespace ChatClient
                 {
                     bi = bitmap.ToBitmapImage();
                 }
+                bi.Freeze();
+                Dispatcher.BeginInvoke(new ThreadStart(delegate { videoPlayer.Source = bi; }));
 
                 Dispatcher.Invoke(() =>
                 {
@@ -149,15 +155,13 @@ namespace ChatClient
 
                         client.Send(sendBytes, sendBytes.Length, friend.address, friend.port);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         StartCamera();
                     }
 
                 });
 
-                bi.Freeze();
-                Dispatcher.BeginInvoke(new ThreadStart(delegate { videoPlayer.Source = bi; }));
 
             }
             catch (Exception exc)

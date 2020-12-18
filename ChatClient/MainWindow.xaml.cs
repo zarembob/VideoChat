@@ -85,6 +85,7 @@ namespace ChatClient
                     dataC.port = Int32.Parse(res[0]);
                     dataC.address = res[1];
 
+
                     Dispatcher.Invoke(() =>
                     {
                         this.Content = new Call(dataF, dataC, server);
@@ -181,13 +182,14 @@ namespace ChatClient
             helper.Option(FriendList.SelectedItem.ToString());
             helper.Option("SetFriendData");
             helper.AcceptFriendData(ref dataF);
-
-            port = dataF.port;
-
+           // MessageBox.Show(dataF.port.ToString());
+           
             GetClientDataDTO dataC = new GetClientDataDTO();
+            helper.Option("GetFriendData");
+            helper.Option(currentClient.Username);
             helper.Option("SetClientData");
             helper.AcceptClientData(ref dataC);
-
+          //  MessageBox.Show(dataC.port.ToString());
             List<string> call = new List<string>();
             call.Add(dataF.port.ToString());
             call.Add(dataF.address);
@@ -207,22 +209,6 @@ namespace ChatClient
             Dispatcher.Invoke(() => { 
             this.Content = new Call(dataF, dataC, server);
             });
-            //UdpClient client = new UdpClient();
-            //byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);
-
-            //client.Send(sendBytes, sendBytes.Length, currentClient.address, dataF.port);
-
-            //IPEndPoint ep = null;
-            //var data = server.Receive(ref ep);
-            //MemoryStream byteStream = new MemoryStream(data);
-            //string check = Encoding.ASCII.GetString(byteStream.ToArray());
-            //client.Close();
-
-            //if (check == "true")
-            //{
-            //    this.Content = new Call(dataF, currentClient);
-            //
-            //}
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
