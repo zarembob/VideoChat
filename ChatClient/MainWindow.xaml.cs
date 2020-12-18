@@ -21,7 +21,7 @@ namespace ChatClient
 {
     public partial class MainWindow : Window
     {
-        private const int port = 2020;
+       // private const int port = 2020;
         private ClientDTO currentClient;
         private static TcpListener server;
         private static ClientHelper helper = new ClientHelper();
