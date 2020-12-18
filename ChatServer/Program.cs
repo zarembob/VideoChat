@@ -1,5 +1,4 @@
 ﻿using ChatClient;
-using ChatServer.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +83,7 @@ namespace ChatServer
                     else if (res == "Login")
                     {
                         var serializer2 = new XmlSerializer(typeof(ClientDTO));
+                        //Error 
                         var client2 = (ClientDTO)serializer2.Deserialize(stream);
                         Client c = new Client
                         {
@@ -98,6 +98,7 @@ namespace ChatServer
                         currentUser = dbHelper.GetUserName(c);
                         if (dbHelper.IsLogin(c))
                         {
+                            LoginFriendNames.Clear();
                             var l = dbHelper.GetFriends(client2.Email);
                             LoginFriendNames.Add("Granted");
                             Console.WriteLine(dbHelper.GetUserName(c));

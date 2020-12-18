@@ -34,6 +34,10 @@ namespace ChatClient
             _client.Friends.Remove("Granted");
             currentClient = _client;
             this.DataContext = currentClient;
+            foreach (var item in currentClient.Friends)
+            {
+                FriendList.Items.Add(item);
+            }
             server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
             server.Start();
             server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
@@ -77,7 +81,7 @@ namespace ChatClient
                 helper.AcceptFriendData(ref dataF);
                 IPAddress address = IPAddress.Parse(dataF.address);
                 server.Stop();
-                this.Content = new Call(address, dataF.port, currentClient);
+                this.Content = new Call(dataF, currentClient);
             }
         }
 
@@ -149,7 +153,7 @@ namespace ChatClient
             if (response == "true")
             {
                 IPAddress address = IPAddress.Parse(data.address);
-                this.Content = new Call(address, data.port, currentClient);
+                this.Content = new Call(data, currentClient);
 
             }
             stream.Close();
@@ -164,9 +168,11 @@ namespace ChatClient
             string re = helper.AcceptCallback();
             if(re=="Granted") 
             {
+
                 currentClient.Friends.Add(AddFriend.Text);
-                
+                FriendList.Items.Add(AddFriend.Text);
                 AddFriend.Text = "Yes";
+
             }
             else
             {

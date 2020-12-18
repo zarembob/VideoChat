@@ -111,17 +111,12 @@
                     x:Name="searchBoxBorder"
                     FocusManager.FocusedElement="{Binding ElementName=searchQuery}"
                     >
-                    <TextBox
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Name="searchQuery" 
-                        Padding="12,0"
-                        Text="Search Text"
-                        VerticalAlignment="Stretch"
-                        VerticalContentAlignment="Center"
-                       ></TextBox>
+                    <Label Content="{Binding Port,UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"></Label>
+                    
+                    
                 </Border>
-                <ListBox x:Name="FriendList" ItemsSource="{Binding Friends, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"  Grid.Row="2">
+                <Label Content="{Binding address,UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"></Label>
+                <ListBox x:Name="FriendList"   Grid.Row="2">
                 </ListBox>
                 <Button x:Name="Phone" Grid.Row="3" Click="Button_Click">Phone</Button>
                 <TextBox x:Name="AddFriend" Grid.Row="4"></TextBox>
