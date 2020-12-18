@@ -99,6 +99,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CallRequest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -113,6 +117,9 @@
     <Compile Include="BitmapHelpers.cs" />
     <Compile Include="Call.xaml.cs">
       <DependentUpon>Call.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CallRequest.xaml.cs">
+      <DependentUpon>CallRequest.xaml</DependentUpon>
     </Compile>
     <Compile Include="ClientDTO.cs" />
     <Compile Include="Auntefication\Login.xaml.cs">

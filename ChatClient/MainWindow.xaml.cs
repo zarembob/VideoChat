@@ -42,6 +42,7 @@ namespace ChatClient
             
             this.DataContext = currentClient;
             var thread = new Thread(BeginListenCall);
+            thread.IsBackground = true;
             thread.Start();
             
            // foreach (var item in currentClient.Friends)
@@ -78,6 +79,7 @@ namespace ChatClient
                         helper.Option("SetFriendData");
                         helper.AcceptFriendData(ref dataF);
                         client.Send(sendBytes, sendBytes.Length,dataF.address, dataF.port);
+                        
                     }
                     
                     #region Test
@@ -138,7 +140,12 @@ namespace ChatClient
                 if (data == item)
                 {
 
-                    return "true";
+                    CallRequest request = new CallRequest(data);
+                    request.ShowDialog();
+                    if (Data.answer)
+                        return "true";
+                    else
+                        return "false";
                 }
 
             }

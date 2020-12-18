@@ -9,5 +9,6 @@ namespace ChatClient
     public static class Data
     {
         public static ClientDTO client { get; set; }
+        public static bool answer { get; set; }
     }
 }
