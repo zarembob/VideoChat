@@ -60,24 +60,27 @@ namespace ChatClient
             // server.Stop();
 
         }
-        
+
         static int port;
         private void Receive()
         {
             while (true)
             {
+
                 IPEndPoint ep = null;
                 var data = server.Receive(ref ep);
-                FriendD.Content = "Connect";
                 MessageBox.Show(Encoding.UTF8.GetString(data));
                 if (Encoding.UTF8.GetString(data) == "true")
                 {
-                    
+                    Dispatcher.Invoke(() =>
+               {
+                   AddFriend.Text = "Connect";
+               });
                     var count = server.Receive(ref ep);
                     List<string> res = new List<string>();
                     for (int i = 0; i < Int32.Parse(Encoding.UTF8.GetString(count)); i++)
                     {
-                       
+
                         var r = server.Receive(ref ep);
                         res[i] = Encoding.UTF8.GetString(r);
                     }
@@ -89,9 +92,9 @@ namespace ChatClient
                     dataC.address = res[1];
 
                     UdpClient c = new UdpClient(dataC.port);
-                    this.Content = new Call(dataF, dataC,c);
+                    this.Content = new Call(dataF, dataC, c);
                     thread.Abort();
-                   
+
                 }
             }
         }
@@ -116,53 +119,7 @@ namespace ChatClient
         {
 
         }
-        private void BeginListenCall()
-        {
-            while (true)
-            {
 
-
-            var data = server.Receive(ref ep);
-            Dispatcher.Invoke(() =>
-            {
-                MemoryStream byteStream = new MemoryStream(data);
-                string check = Encoding.ASCII.GetString(byteStream.ToArray());
-                if (CheckData(check) == "true")
-                {
-                    UdpClient client = new UdpClient();
-                    byte[] sendBytes = Encoding.ASCII.GetBytes("true");
-                    GetFriendDataDTO dataF = new GetFriendDataDTO();
-                    helper.Option("GetFriendData");
-                    helper.Option(check);
-                    helper.Option("SetFriendData");
-                    helper.AcceptFriendData(ref dataF);
-                    client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
-                    // this.Content = new Call(dataF, currentClient);
-
-                    // Process the data sent by the client.
-                    data = data.ToUpper();
-
-                }
-                else if (CheckData(check) == "false")
-                {
-                    UdpClient client = new UdpClient();
-                    byte[] sendBytes = Encoding.ASCII.GetBytes("false");
-                    GetFriendDataDTO dataF = new GetFriendDataDTO();
-                    helper.Option("GetFriendData");
-                    helper.Option(check);
-                    helper.Option("SetFriendData");
-                    helper.AcceptFriendData(ref dataF);
-                    client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
-                }
-                #region Test
-                //BitmapImage image = new BitmapImage();
-                //image.BeginInit();
-                //image.StreamSource = byteStream;
-                //image.EndInit();
-                //videoFriend.Source = image;
-                #endregion
-
-            });
 
         // private void DoAcceptTcpClientCallback(IAsyncResult ar)
         // {
@@ -172,56 +129,9 @@ namespace ChatClient
         //
         // }
 
-        private void GetData(TcpClient _client)
-        {
-            byte[] bytes = new byte[1024];
-            string data = "";
-            NetworkStream stream = _client.GetStream();
-            int i;
-            i = stream.Read(bytes, 0, bytes.Length);
-            while (i != 0)
-            {
 
-                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
 
-                data = data.ToUpper();
-                i = stream.Read(bytes, 0, bytes.Length);
-            }
-            string check = CheckData(data);
-            byte[] msg = System.Text.Encoding.ASCII.GetBytes(check);
-            stream.Write(msg, 0, msg.Length);
-            if (check == "true")
-            {
-                GetFriendDataDTO dataF = new GetFriendDataDTO();
-                helper.Option("GetFriendData");
-                helper.Option(data);
-                helper.Option("SetFriendData");
-                helper.AcceptFriendData(ref dataF);
-                IPAddress address = IPAddress.Parse(dataF.address);
-                //server.Stop();
-                // this.Content = new Call(dataF, currentClient);
-            }
-        }
 
-        private string CheckData(string data)
-        {
-
-            foreach (var item in currentClient.Friends)
-            {
-                if (data == item)
-                {
-
-                    CallRequest request = new CallRequest(data);
-                    request.ShowDialog();
-                    if (Data.answer)
-                        return "true";
-                    else
-                        return "false";
-                }
-
-            }
-            return "false";
-        }
 
         private void Phone_Click(object sender, RoutedEventArgs e)
         {
@@ -330,6 +240,7 @@ namespace ChatClient
             UdpClient udpClient = new UdpClient();
             string tmp = "true";
             udpClient.Send(Encoding.UTF8.GetBytes(tmp), tmp.Length, dataF.address, dataF.port);
+            Thread.Sleep(10);
             udpClient.Send(Encoding.UTF8.GetBytes(call.Count.ToString()), call.Count.ToString().Length, dataF.address, dataF.port);
             for (int i = 0; i < call.Count; i++)
             {
@@ -337,7 +248,7 @@ namespace ChatClient
 
             }
             UdpClient c = new UdpClient(dataF.port);
-            this.Content = new Call(dataF, dataC,c);
+            this.Content = new Call(dataF, dataC, c);
             //UdpClient client = new UdpClient();
             //byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);
 
