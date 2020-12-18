@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 namespace ChatClient
 {
-   public class GetFriendData
+    public class GetFriendDataDTO
     {
         public  string address { get; set; }
         public int port { get; set; }
