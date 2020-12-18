@@ -101,5 +101,18 @@ namespace ChatServer
             }
             return port;
         }
+        public bool CheckAddFriend(string currentName)
+        {
+            bool flag = false;
+            foreach (Friend item in Context.Friends)
+            {
+                if (item.Name == currentName )
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            return flag;
+        }
     }
 }

@@ -12,8 +12,8 @@ namespace ChatServer
 {
     class Program
     {
-        private static int port = 2020; 
-       
+        private static int port = 2020;
+
         private static IPAddress ip;
         private static TcpListener server;
 
@@ -35,7 +35,7 @@ namespace ChatServer
             bool isLogin = false;
             bool isRegister = false;
             int currentPort = 0;
-            int ClientPort=dbHelper.GetLastPort();
+            int ClientPort = dbHelper.GetLastPort();
             ClientPort++;
             Client currentClient1 = new Client();
             Client currentClient2 = new Client();
@@ -101,7 +101,7 @@ namespace ChatServer
                         if (dbHelper.IsLogin(c))
                         {
                             LoginFriendNames.Clear();
-                            var l = dbHelper.GetFriends(client2.Email);
+                            var l = dbHelper.GetFriends(currentClient1.Email);
                             LoginFriendNames.Add("Granted");
                             Console.WriteLine(dbHelper.GetUserName(c).Name);
                             LoginFriendNames.Add(dbHelper.GetUserName(c).Name);
@@ -175,6 +175,7 @@ namespace ChatServer
                     }
                     else if (res == "Add")
                     {
+
                         var serializer = new XmlSerializer(typeof(string));
                         var friend = (string)serializer.Deserialize(stream);
                         currentFriend = dbHelper.GetClient(friend);
@@ -182,20 +183,33 @@ namespace ChatServer
                     }
                     else if (res == "GetFriend")
                     {
-                        if (currentFriend != null)
+                        var serializer = new XmlSerializer(typeof(string));
+                        if (currentFriend != null && currentClient1 != currentFriend)
                         {
-                            Friend f = new Friend()
+                            if (!dbHelper.CheckAddFriend(currentFriend.Name))
                             {
-                                Name = currentFriend.Name,
-                                Email = currentFriend.Email,
-                                ClientEmail = currentClient1.Email,
-                                Port =currentFriend.Port,
-                                address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).MapToIPv4().ToString()
-                            }; dbHelper.AddFriend(f);
-                            var serializer = new XmlSerializer(typeof(string));
-                            serializer.Serialize(stream, "Granted");
-                        }
 
+                                Friend f = new Friend()
+                                {
+                                    Name = currentFriend.Name,
+                                    Email = currentFriend.Email,
+                                    ClientEmail = currentClient1.Email,
+                                    Port = currentFriend.Port,
+                                    address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).MapToIPv4().ToString()
+                                };
+                                dbHelper.AddFriend(f);
+
+                                serializer.Serialize(stream, "Granted");
+                            }
+                            else
+                            {
+                                serializer.Serialize(stream, "Denied");
+                            }
+                        }
+                        else
+                        {
+                            serializer.Serialize(stream, "Denied");
+                        }
                     }
                 }
 
