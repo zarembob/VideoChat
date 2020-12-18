@@ -12,7 +12,8 @@ namespace ChatServer
 {
     class Program
     {
-        private const int port = 2020;
+        private static int port = 2020; 
+       
         private static IPAddress ip;
         private static TcpListener server;
 
@@ -34,6 +35,8 @@ namespace ChatServer
             bool isLogin = false;
             bool isRegister = false;
             int currentPort = 0;
+            int ClientPort=dbHelper.GetLastPort();
+            ClientPort++;
             Client currentClient1 = new Client();
             Client currentClient2 = new Client();
             Client currentFriend = new Client();
@@ -63,10 +66,11 @@ namespace ChatServer
                             Email = client2.Email,
                             Name = client2.Username,
                             Password = client2.Password,
-                            Port = client2.Port,
+                            Port = ClientPort,
                             address = ""
 
                         };
+                        ClientPort++;
                         if (!dbHelper.IsRegister(c))
                         {
                             isRegister = true;
@@ -185,9 +189,9 @@ namespace ChatServer
                                 Name = currentFriend.Name,
                                 Email = currentFriend.Email,
                                 ClientEmail = currentClient1.Email,
-                                Port = 2021,
-                                address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).ToString()
-                            };  dbHelper.AddFriend(f);
+                                Port =currentFriend.Port,
+                                address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).MapToIPv4().ToString()
+                            }; dbHelper.AddFriend(f);
                             var serializer = new XmlSerializer(typeof(string));
                             serializer.Serialize(stream, "Granted");
                         }

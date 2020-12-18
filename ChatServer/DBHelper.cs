@@ -91,5 +91,15 @@ namespace ChatServer
             }
             return flag;
         }
+
+        public int GetLastPort()
+        {
+            int port = 0;
+            foreach (Client item in Context.Clients)
+            {
+                port = item.Port;
+            }
+            return port;
+        }
     }
 }
