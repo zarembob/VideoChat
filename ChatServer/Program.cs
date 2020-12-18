@@ -36,7 +36,10 @@ namespace ChatServer
             bool isRegister = false;
             int currentPort = 0;
             int ClientPort = dbHelper.GetLastPort();
-            ClientPort++;
+            if(ClientPort<2020)
+            {
+            ClientPort=2020;
+            }
             Client currentClient1 = new Client();
             Client currentClient2 = new Client();
             Client currentFriend = new Client();
@@ -93,7 +96,7 @@ namespace ChatServer
                             //Name = client2.Username,
                             Password = client2.Password,
                             friends = dbHelper.GetFriends(client2.Email),
-                            Port = client2.Port
+                            Port = dbHelper.GetClient(client2.Email).Port
 
                         };
                         currentPort = c.Port;

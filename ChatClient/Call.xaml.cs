@@ -56,12 +56,14 @@ namespace ChatClient
 
         public Call(GetFriendDataDTO data, GetClientDataDTO client, UdpClient _server)
         {
+            Dispatcher.Invoke(() => { 
             InitializeComponent();
             this.DataContext = this;
             friend = data;
             myPort = client.port;
             server = _server;
             GetVideoDevices();
+            });
             var thread = new Thread(Receive);
             thread.IsBackground = true;
             thread.Start();

@@ -28,7 +28,6 @@ namespace ChatClient
         UdpClient server;
         private static ClientHelper helper = new ClientHelper();
         Thread thread;
-        TcpListener serverr;
         public MainWindow()
         {
 
@@ -40,10 +39,7 @@ namespace ChatClient
             Data.client.Friends.Remove("Granted");
             currentClient = Data.client;
             server = new UdpClient(currentClient.Port);
-            serverr = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
-            this.DataContext = currentClient;
-
-
+            this.DataContext = currentClient;        
             thread = new Thread(Receive);
             thread.IsBackground = true;
             thread.Start();
@@ -69,21 +65,19 @@ namespace ChatClient
 
                 IPEndPoint ep = null;
                 var data = server.Receive(ref ep);
-                MessageBox.Show(Encoding.UTF8.GetString(data));
                 if (Encoding.UTF8.GetString(data) == "true")
                 {
-                    Dispatcher.Invoke(() =>
-               {
-                   AddFriend.Text = "Connect";
-               });
-                    var count = server.Receive(ref ep);
+                    //MessageBox.Show(Encoding.UTF8.GetString(data));
+                    ep = null;
+                
                     List<string> res = new List<string>();
-                    for (int i = 0; i < Int32.Parse(Encoding.UTF8.GetString(count)); i++)
+                    for (int i = 0; i < 4; i++)
                     {
 
                         var r = server.Receive(ref ep);
-                        res[i] = Encoding.UTF8.GetString(r);
+                        res.Add(Encoding.UTF8.GetString(r));
                     }
+                   
                     GetFriendDataDTO dataF = new GetFriendDataDTO();
                     dataF.port = Int32.Parse(res[2]);
                     dataF.address = res[3];
@@ -91,51 +85,14 @@ namespace ChatClient
                     dataC.port = Int32.Parse(res[0]);
                     dataC.address = res[1];
 
-                    UdpClient c = new UdpClient(dataC.port);
-                    this.Content = new Call(dataF, dataC, c);
+                    Dispatcher.Invoke(() =>
+                    {
+                        this.Content = new Call(dataF, dataC, server);
+                    });
                     thread.Abort();
 
                 }
             }
-        }
-
-        private void AcceptFriend()
-        {
-            while (true)
-            {
-                GetFriendDataDTO response;
-                var client = new TcpClient(Dns.GetHostName(), 2020);
-                using (var stream = client.GetStream())
-                {
-                    var serializer1 = new XmlSerializer(typeof(GetFriendDataDTO));
-                    response = (GetFriendDataDTO)serializer1.Deserialize(stream);
-                }
-                // this.Content = new Call(response, dataC);
-            }
-
-        }
-
-        private void GetRes()
-        {
-
-        }
-
-
-        // private void DoAcceptTcpClientCallback(IAsyncResult ar)
-        // {
-        //     TcpListener listener = (TcpListener)ar.AsyncState;
-        //     TcpClient client = listener.EndAcceptTcpClient(ar);
-        //     GetData(client);
-        //
-        // }
-
-
-
-
-
-        private void Phone_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -236,19 +193,20 @@ namespace ChatClient
             call.Add(dataF.address);
             call.Add(dataC.port.ToString());
             call.Add(dataC.address);
-
+        
+          
             UdpClient udpClient = new UdpClient();
             string tmp = "true";
-            udpClient.Send(Encoding.UTF8.GetBytes(tmp), tmp.Length, dataF.address, dataF.port);
-            Thread.Sleep(10);
-            udpClient.Send(Encoding.UTF8.GetBytes(call.Count.ToString()), call.Count.ToString().Length, dataF.address, dataF.port);
+            udpClient.Send(Encoding.UTF8.GetBytes(tmp), tmp.Length, dataF.address, dataF.port);            
             for (int i = 0; i < call.Count; i++)
             {
+                Thread.Sleep(1000);
                 udpClient.Send(Encoding.UTF8.GetBytes(call[i]), call[i].Length, dataF.address, dataF.port);
 
             }
-            UdpClient c = new UdpClient(dataF.port);
-            this.Content = new Call(dataF, dataC, c);
+            Dispatcher.Invoke(() => { 
+            this.Content = new Call(dataF, dataC, udpClient);
+            });
             //UdpClient client = new UdpClient();
             //byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);
 
