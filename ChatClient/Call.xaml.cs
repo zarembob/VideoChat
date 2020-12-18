@@ -56,13 +56,14 @@ namespace ChatClient
 
         public Call(GetFriendDataDTO data, GetClientDataDTO client, UdpClient _server)
         {
-            Dispatcher.Invoke(() => { 
-            InitializeComponent();
-            this.DataContext = this;
-            friend = data;
-            myPort = client.port;
-            server = _server;
-            GetVideoDevices();
+            Dispatcher.Invoke(() =>
+            {
+                InitializeComponent();
+                this.DataContext = this;
+                friend = data;
+                myPort = client.port;
+                server = _server;
+                GetVideoDevices();
             });
             var thread = new Thread(Receive);
             thread.IsBackground = true;
@@ -84,6 +85,7 @@ namespace ChatClient
                     image.BeginInit();
                     image.StreamSource = byteStream;
                     image.EndInit();
+                    image.Freeze();
                     videoFriend.Source = image;
 
 
@@ -136,12 +138,21 @@ namespace ChatClient
                 {
 
                     UdpClient client = new UdpClient();
-                    byte[] sendBytes = new byte[1024];
+                    byte[] sendBytes = new byte[8000];
                     JpegBitmapEncoder encoder = new JpegBitmapEncoder();
 
-                    Thread.Sleep(10);
+
                     sendBytes = ImageSourceToBytes(encoder, bi);
-                    client.Send(sendBytes, sendBytes.Length, friend.address, friend.port);
+                    try
+                    {
+
+                        client.Send(sendBytes, sendBytes.Length, friend.address, friend.port);
+                    }
+                    catch(Exception ex)
+                    {
+                        StartCamera();
+                    }
+
                 });
 
                 bi.Freeze();
