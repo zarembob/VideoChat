@@ -173,6 +173,14 @@ namespace ChatServer
                         var serializer = new XmlSerializer(typeof(GetFriendDataDTO));
                         serializer.Serialize(stream, getFriend);
                     }
+                    else if (res == "SetClientData")
+                    {
+                        GetClientDataDTO getFriend = new GetClientDataDTO();
+                        getFriend.address = currentClient1.address;
+                        getFriend.port = currentClient1.Port;
+                        var serializer = new XmlSerializer(typeof(GetClientDataDTO));
+                        serializer.Serialize(stream, getFriend);
+                    }
                     else if (res == "Add")
                     {
 
@@ -186,6 +194,15 @@ namespace ChatServer
                         var serializer = new XmlSerializer(typeof(string));
                         if (currentFriend != null && currentClient1 != currentFriend)
                         {
+                            string ipAddress="";
+                            var host = Dns.GetHostEntry(Dns.GetHostName());
+                            foreach (var ip in host.AddressList)
+                            {
+                                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                                {
+                                    ipAddress = ip.ToString();
+                                }
+                            }
                             if (!dbHelper.CheckAddFriend(currentFriend.Name))
                             {
 
@@ -195,7 +212,9 @@ namespace ChatServer
                                     Email = currentFriend.Email,
                                     ClientEmail = currentClient1.Email,
                                     Port = currentFriend.Port,
-                                    address = (Dns.GetHostEntry(Dns.GetHostName()).AddressList[0]).MapToIPv4().ToString()
+                                    address = ipAddress
+
+
                                 };
                                 dbHelper.AddFriend(f);
 

@@ -126,6 +126,7 @@
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="ClientHelper.cs" />
+    <Compile Include="GetClientDataDTO.cs" />
     <Compile Include="GetFriendDataDTO.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -54,17 +54,17 @@ namespace ChatClient
         GetFriendDataDTO friend;
         UdpClient server;
 
-        public Call(GetFriendDataDTO data, ClientDTO client)
+        public Call(GetFriendDataDTO data, GetClientDataDTO client, UdpClient _server)
         {
             InitializeComponent();
             this.DataContext = this;
             friend = data;
-            myPort = client.Port;
-            server = new UdpClient(myPort);
+            myPort = client.port;
+            server = _server;
+            GetVideoDevices();
             var thread = new Thread(Receive);
             thread.IsBackground = true;
             thread.Start();
-            GetVideoDevices();
             // this.Closing += MainWindow_Closing;
         }
         #region VideoCall
@@ -182,6 +182,7 @@ namespace ChatClient
                 _videoSource.NewFrame += video_NewFrame;
                 _videoSource.Start();
             }
+
         }
 
         private void StopCamera()

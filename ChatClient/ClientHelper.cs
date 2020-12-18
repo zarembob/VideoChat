@@ -134,6 +134,17 @@ namespace ChatClient
             }
             data = response;
         }
+        internal void AcceptClientData(ref GetClientDataDTO data)
+        {
+            GetClientDataDTO response;
+            var client = new TcpClient(Dns.GetHostName(), port);
+            using (var stream = client.GetStream())
+            {
+                var serializer1 = new XmlSerializer(typeof(GetClientDataDTO));
+                response = (GetClientDataDTO)serializer1.Deserialize(stream);
+            }
+            data = response;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string name)

@@ -41,7 +41,9 @@ namespace ChatClient
             server = new UdpClient(currentClient.Port);
 
             this.DataContext = currentClient;
-            thread = new Thread(AcceptFriend);
+
+
+            thread = new Thread(Receive);
             thread.IsBackground = true;
             thread.Start();
 
@@ -57,6 +59,42 @@ namespace ChatClient
             // server.Stop();
 
         }
+        
+        static int port;
+        private void Receive()
+        {
+            while (true)
+            {
+                IPEndPoint ep = null;
+                var data = server.Receive(ref ep);
+                FriendD.Content = "Connect";
+                MessageBox.Show(Encoding.UTF8.GetString(data));
+                if (Encoding.UTF8.GetString(data) == "true")
+                {
+                    
+                    var count = server.Receive(ref ep);
+                    List<string> res = new List<string>();
+                    for (int i = 0; i < Int32.Parse(Encoding.UTF8.GetString(count)); i++)
+                    {
+                       
+                        var r = server.Receive(ref ep);
+                        res[i] = Encoding.UTF8.GetString(r);
+                    }
+                    GetFriendDataDTO dataF = new GetFriendDataDTO();
+                    dataF.port = Int32.Parse(res[2]);
+                    dataF.address = res[3];
+                    GetClientDataDTO dataC = new GetClientDataDTO();
+                    dataC.port = Int32.Parse(res[0]);
+                    dataC.address = res[1];
+
+                    UdpClient c = new UdpClient(dataC.port);
+                    this.Content = new Call(dataF, dataC,c);
+                    thread.Abort();
+                   
+                }
+            }
+        }
+
         private void AcceptFriend()
         {
             while (true)
@@ -68,7 +106,7 @@ namespace ChatClient
                     var serializer1 = new XmlSerializer(typeof(GetFriendDataDTO));
                     response = (GetFriendDataDTO)serializer1.Deserialize(stream);
                 }
-                this.Content = new Call(response, currentClient);
+                // this.Content = new Call(response, dataC);
             }
 
         }
@@ -97,7 +135,7 @@ namespace ChatClient
                     helper.Option("SetFriendData");
                     helper.AcceptFriendData(ref dataF);
                     client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
-                    this.Content = new Call(dataF, currentClient);
+                    // this.Content = new Call(dataF, currentClient);
 
 
                 }
@@ -112,15 +150,15 @@ namespace ChatClient
                     helper.AcceptFriendData(ref dataF);
                     client.Send(sendBytes, sendBytes.Length, dataF.address, dataF.port);
                 }
-                    #region Test
-                    //BitmapImage image = new BitmapImage();
-                    //image.BeginInit();
-                    //image.StreamSource = byteStream;
-                    //image.EndInit();
-                    //videoFriend.Source = image;
-                    #endregion
+                #region Test
+                //BitmapImage image = new BitmapImage();
+                //image.BeginInit();
+                //image.StreamSource = byteStream;
+                //image.EndInit();
+                //videoFriend.Source = image;
+                #endregion
 
-                });
+            });
 
         }
         // private void DoAcceptTcpClientCallback(IAsyncResult ar)
@@ -158,7 +196,7 @@ namespace ChatClient
                 helper.AcceptFriendData(ref dataF);
                 IPAddress address = IPAddress.Parse(dataF.address);
                 //server.Stop();
-                this.Content = new Call(dataF, currentClient);
+                // this.Content = new Call(dataF, currentClient);
             }
         }
 
@@ -215,7 +253,6 @@ namespace ChatClient
         {
             Application.Current.Shutdown();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             #region Bad
@@ -250,7 +287,30 @@ namespace ChatClient
             helper.Option(FriendList.SelectedItem.ToString());
             helper.Option("SetFriendData");
             helper.AcceptFriendData(ref dataF);
-            this.Content = new Call(dataF, currentClient);
+
+            port = dataF.port;
+
+            GetClientDataDTO dataC = new GetClientDataDTO();
+            helper.Option("SetClientData");
+            helper.AcceptClientData(ref dataC);
+
+            List<string> call = new List<string>();
+            call.Add(dataF.port.ToString());
+            call.Add(dataF.address);
+            call.Add(dataC.port.ToString());
+            call.Add(dataC.address);
+
+            UdpClient udpClient = new UdpClient();
+            string tmp = "true";
+            udpClient.Send(Encoding.UTF8.GetBytes(tmp), tmp.Length, dataF.address, dataF.port);
+            udpClient.Send(Encoding.UTF8.GetBytes(call.Count.ToString()), call.Count.ToString().Length, dataF.address, dataF.port);
+            for (int i = 0; i < call.Count; i++)
+            {
+                udpClient.Send(Encoding.UTF8.GetBytes(call[i]), call[i].Length, dataF.address, dataF.port);
+
+            }
+            UdpClient c = new UdpClient(dataF.port);
+            this.Content = new Call(dataF, dataC,c);
             //UdpClient client = new UdpClient();
             //byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);
 
@@ -262,11 +322,11 @@ namespace ChatClient
             //string check = Encoding.ASCII.GetString(byteStream.ToArray());
             //client.Close();
 
-           //if (check == "true")
-           //{
-           //    this.Content = new Call(dataF, currentClient);
-           //
-           //}
+            //if (check == "true")
+            //{
+            //    this.Content = new Call(dataF, currentClient);
+            //
+            //}
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
