@@ -199,13 +199,14 @@ namespace ChatClient
             helper.Option(FriendList.SelectedItem.ToString());
             helper.Option("SetFriendData");
             helper.AcceptFriendData(ref dataF);
-
-            port = dataF.port;
-
+           // MessageBox.Show(dataF.port.ToString());
+           
             GetClientDataDTO dataC = new GetClientDataDTO();
+            helper.Option("GetFriendData");
+            helper.Option(currentClient.Username);
             helper.Option("SetClientData");
             helper.AcceptClientData(ref dataC);
-
+          //  MessageBox.Show(dataC.port.ToString());
             List<string> call = new List<string>();
             call.Add(dataF.port.ToString());
             call.Add(dataF.address);

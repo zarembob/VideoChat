@@ -179,8 +179,8 @@ namespace ChatServer
                     else if (res == "SetClientData")
                     {
                         GetClientDataDTO getFriend = new GetClientDataDTO();
-                        getFriend.address = currentClient1.address;
-                        getFriend.port = currentClient1.Port;
+                        getFriend.address = currentClient2.address;
+                        getFriend.port = currentClient2.Port;
                         var serializer = new XmlSerializer(typeof(GetClientDataDTO));
                         serializer.Serialize(stream, getFriend);
                     }
