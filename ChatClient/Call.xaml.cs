@@ -38,6 +38,9 @@ namespace ChatClient
             get { return _currentDevice; }
             set { _currentDevice = value; this.OnPropertyChanged("CurrentDevice"); }
         }
+
+        public WindowState WindowState { get; private set; }
+
         private FilterInfo _currentDevice;
 
         #endregion
@@ -213,5 +216,28 @@ namespace ChatClient
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            StopCamera();
+            Application.Current.Shutdown();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            if (WindowState == WindowState.Normal)
+                WindowState = WindowState.Maximized;
+            else
+            {
+                WindowState = WindowState.Normal;
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+       
     }
 }

@@ -34,27 +34,36 @@ namespace ChatClient
             InitializeComponent();
             Login l = new Login();
             l.ShowDialog();
-
+   
             Data.client.Friends.Remove(Data.client.Username);
             Data.client.Friends.Remove("Granted");
             currentClient = Data.client;
-            server = new UdpClient(currentClient.Port);
+            try
+            {
+                server = new UdpClient(currentClient.Port);
+            }
+          catch(SocketException ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
             this.DataContext = currentClient;        
             thread = new Thread(Receive);
             thread.IsBackground = true;
-            thread.Start();
+            try
+            {
+                thread.Start();
+            }
+            catch(OutOfMemoryException ex)
+            {
+                MessageBox.Show(ex.Message);
+                this.Close();
+            }
 
             foreach (var item in currentClient.Friends)
             {
                 FriendList.Items.Add(item);
             }
-
-
-            // server = new TcpListener(IPAddress.Parse(currentClient.address), currentClient.Port);
-            // server.Start();
-            // server.BeginAcceptTcpClient(DoAcceptTcpClientCallback, server);
-            // server.Stop();
-
         }
 
         static int port;
@@ -64,34 +73,43 @@ namespace ChatClient
             {
 
                 IPEndPoint ep = null;
-                var data = server.Receive(ref ep);
-                if (Encoding.UTF8.GetString(data) == "true")
+                try
                 {
-                    //MessageBox.Show(Encoding.UTF8.GetString(data));
-                    ep = null;
-                
-                    List<string> res = new List<string>();
-                    for (int i = 0; i < 4; i++)
+                    var data = server.Receive(ref ep);
+                    if (Encoding.UTF8.GetString(data) == "true")
                     {
 
-                        var r = server.Receive(ref ep);
-                        res.Add(Encoding.UTF8.GetString(r));
+                        ep = null;
+
+                        List<string> res = new List<string>();
+                        for (int i = 0; i < 4; i++)
+                        {
+
+                            var r = server.Receive(ref ep);
+                            res.Add(Encoding.UTF8.GetString(r));
+                        }
+
+                        GetFriendDataDTO dataF = new GetFriendDataDTO();
+                        dataF.port = Int32.Parse(res[2]);
+                        dataF.address = res[3];
+                        GetClientDataDTO dataC = new GetClientDataDTO();
+                        dataC.port = Int32.Parse(res[0]);
+                        dataC.address = res[1];
+
+                        Dispatcher.Invoke(() =>
+                        {
+                            this.Content = new Call(dataF, dataC, server);
+                        });
+                        thread.Abort();
+
                     }
-                   
-                    GetFriendDataDTO dataF = new GetFriendDataDTO();
-                    dataF.port = Int32.Parse(res[2]);
-                    dataF.address = res[3];
-                    GetClientDataDTO dataC = new GetClientDataDTO();
-                    dataC.port = Int32.Parse(res[0]);
-                    dataC.address = res[1];
-
-                    Dispatcher.Invoke(() =>
-                    {
-                        this.Content = new Call(dataF, dataC, server);
-                    });
-                    thread.Abort();
-
                 }
+               catch(SocketException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    this.Close();
+                }
+                
             }
         }
 
@@ -150,7 +168,7 @@ namespace ChatClient
             //client.Close();
             #endregion
 
-            //thread.Abort();
+            thread.Abort();
             #region haram
             // GetFriendDataDTO dataF = new GetFriendDataDTO();
             // helper.Option("GetFriendData");
@@ -200,33 +218,19 @@ namespace ChatClient
             udpClient.Send(Encoding.UTF8.GetBytes(tmp), tmp.Length, dataF.address, dataF.port);            
             for (int i = 0; i < call.Count; i++)
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
                 udpClient.Send(Encoding.UTF8.GetBytes(call[i]), call[i].Length, dataF.address, dataF.port);
 
             }
             Dispatcher.Invoke(() => { 
             this.Content = new Call(dataF, dataC, server);
             });
-            //UdpClient client = new UdpClient();
-            //byte[] sendBytes = Encoding.ASCII.GetBytes(currentClient.Username);
-
-            //client.Send(sendBytes, sendBytes.Length, currentClient.address, dataF.port);
-
-            //IPEndPoint ep = null;
-            //var data = server.Receive(ref ep);
-            //MemoryStream byteStream = new MemoryStream(data);
-            //string check = Encoding.ASCII.GetString(byteStream.ToArray());
-            //client.Close();
-
-            //if (check == "true")
-            //{
-            //    this.Content = new Call(dataF, currentClient);
-            //
-            //}
+            
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            
             helper.Option("Add");
             helper.Option(AddFriend.Text);
             helper.Option("GetFriend");
