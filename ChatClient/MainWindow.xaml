@@ -9,11 +9,10 @@
         AllowsTransparency="True"
         Background="Transparent"
         FontSize="15"
-        ResizeMode="NoResize"
         Title="{Binding Username,Mode=OneWay}"
         WindowStyle="None"
-        WindowStartupLocation="CenterScreen"
-        d:DesignHeight="600" d:DesignWidth="450">
+        WindowStartupLocation="CenterScreen" Width="665.46"
+       >
     <Border
         CornerRadius="20"
         Background="WhiteSmoke">
@@ -116,12 +115,17 @@
                     
                 </Border>
                 <Label Content="{Binding address,UpdateSourceTrigger=PropertyChanged, Mode=OneTime}"></Label>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
                 <ListBox  x:Name="FriendList"   Grid.Row="2">
                 </ListBox>
                 <Button x:Name="Phone" Grid.Row="3" Click="Button_Click">Phone</Button>
-                <TextBox x:Name="AddFriend" Grid.Row="4"></TextBox>
-                <Button Grid.Row="5" Click="Button_Click_1">Add </Button>
-                <Label Background="Orange" Name="FriendD"></Label>
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <TextBox MinWidth="100" x:Name="AddFriend" Grid.Row="4"></TextBox>
+                    <Button Grid.Row="5" Click="Button_Click_1">Add</Button>
+                </StackPanel>
+                
+                <!--<Label Background="Orange" Name="FriendD"></Label>-->
             </Grid>
            
         </Grid>

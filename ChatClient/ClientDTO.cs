@@ -25,10 +25,8 @@ namespace ChatClient
         public int Id { get; set; }
         private string username;
         public string Username { get { return username; } set { username = value; OnPropertyChanged("username"); } }
-        private string email;
-        public string Email { get { return email; } set { email = value; } }
-        private string password;
-        public string Password { get { return password; } set { password = value; } }
+        public string Email { get; set; }
+        public string Password { get; set; }
         private List<string> friends = new List<string>();
         public List<string> Friends
         {

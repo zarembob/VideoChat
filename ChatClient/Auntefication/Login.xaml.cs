@@ -25,7 +25,6 @@ namespace ChatClient
     public partial class Login : Window
     {
         ClientHelper helper = new ClientHelper();
-        private const int port = 2020;
         public Login()
         {
             InitializeComponent();
@@ -51,7 +50,7 @@ namespace ChatClient
             }
             else
             {
-              
+                email.Text = "Invalid data";
             }
         }
 
