@@ -64,7 +64,7 @@ namespace ChatClient
                 friend = data;
                 clientDTO = _client;
                 myPort = clientDTO.port;
-               // MessageBox.Show(_server.ToString() + data.port.ToString() + _client.port.ToString());
+                // MessageBox.Show(_server.ToString() + data.port.ToString() + _client.port.ToString());
                 server = _server;
                 GetVideoDevices();
             });
@@ -87,7 +87,7 @@ namespace ChatClient
                 image.StreamSource = byteStream;
                 image.EndInit();
                 image.Freeze();
-               
+
                 Dispatcher.Invoke(() =>
                 {
                     videoFriend.Source = image;

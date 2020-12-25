@@ -36,6 +36,7 @@ namespace ChatServer
             bool isRegister = false;
             int currentPort = 0;
             int ClientPort = dbHelper.GetLastPort();
+            ClientPort++;
             if(ClientPort<2020)
             {
             ClientPort=2020;
